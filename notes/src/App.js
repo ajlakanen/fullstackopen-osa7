@@ -91,7 +91,7 @@ const Login = (props) => {
   );
 };
 
-export default App = () => {
+const App = () => {
   const padding = {
     padding: 5,
   };
@@ -167,3 +167,5 @@ export default App = () => {
     </div>
   );
 };
+
+export default App;
