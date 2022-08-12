@@ -48,8 +48,10 @@ const AnecdoteList = ({ anecdotes }) => (
 const Anecdote = ({ anecdote }) => {
   return (
     <div>
-      <h2>{anecdote.content}</h2>
-      <p>has {anecdote.votes} votes</p>
+      <h2>
+        {anecdote.content} by {anecdote.author}
+      </h2>
+      <p>has {anecdote.votes} vote</p>
       <p>
         For more info, see <a href={anecdote.info}>{anecdote.info}</a>
       </p>
@@ -91,25 +93,22 @@ const Footer = () => (
 );
 
 const CreateNew = (props) => {
-  const content2 = useField("text");
-  const author2 = useField("text");
-  const info2 = useField("text");
+  const content = useField("text");
+  const author = useField("text");
+  const info = useField("text");
 
-  const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("");
-  const [info, setInfo] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0,
     });
     navigate("/");
-    props.setNotification(`A new anecdote "${content}" was created`);
+    props.setNotification(`A new anecdote "${content.value}" was created`);
     setTimeout(() => {
       props.setNotification("");
     }, 2000);
