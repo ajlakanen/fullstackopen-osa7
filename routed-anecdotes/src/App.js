@@ -175,9 +175,6 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu anecdotes={anecdotes} />
-      <AnecdoteList anecdotes={anecdotes} />
-      <About />
-      <CreateNew addNew={addNew} />
       <Footer />
     </div>
   );
