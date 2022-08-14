@@ -10,38 +10,61 @@ import {
   useMatch,
 } from "react-router-dom";
 import { useField } from "./hooks";
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  TextField,
+  Button,
+  Alert,
+  AppBar,
+  Toolbar,
+  IconButton,
+} from "@mui/material";
 
 const Menu = (props) => {
   const padding = {
     paddingRight: 5,
   };
   return (
-    <>
-      <div>
-        <Link style={padding} to="/">
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton edge="start" color="inherit" aria-label="menu"></IconButton>
+        <Button color="inherit" component={Link} to="/">
           anecdotes
-        </Link>
-        <Link style={padding} to="/create">
+        </Button>
+        <Button color="inherit" component={Link} to="/create">
           create new
-        </Link>
-        <Link style={padding} to="/about">
+        </Button>
+        <Button color="inherit" component={Link} to="/about">
           about
-        </Link>
-      </div>
-    </>
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map((anecdote) => (
-        <li key={anecdote.id}>
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
-        </li>
-      ))}
-    </ul>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableBody>
+          {anecdotes.map((anecdote) => (
+            <TableRow key={anecdote.id}>
+              <TableCell>
+                <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+              </TableCell>
+              <TableCell>{anecdote.author}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   </div>
 );
 
@@ -83,12 +106,14 @@ const About = () => (
 
 const Footer = () => (
   <div>
-    Anecdote app for <a href="https://fullstackopen.com/">Full Stack Open</a>.
-    See{" "}
-    <a href="https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js">
-      https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js
-    </a>{" "}
-    for the source code.
+    <p>
+      Anecdote app for <a href="https://fullstackopen.com/">Full Stack Open</a>.
+      See{" "}
+      <a href="https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js">
+        https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js
+      </a>{" "}
+      for the source code.
+    </p>
   </div>
 );
 
@@ -128,19 +153,18 @@ const CreateNew = (props) => {
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          content
-          <input {...content.input} />
+          <TextField label="content" {...content.input} />
         </div>
         <div>
-          author
-          <input {...author.input} />
+          <TextField label="author" {...author.input} />
         </div>
         <div>
-          url for more info
-          <input {...info.input} />
+          <TextField label="url for more info" {...info.input} />
         </div>
-        <button>create</button>
-        <button onClick={handleResetclick}>reset</button>
+        <Button variant="contained" color="primary" type="submit">
+          create
+        </Button>
+        <Button onClick={handleResetclick}>reset</Button>
       </form>
     </div>
   );
@@ -190,26 +214,28 @@ const App = () => {
     : null;
 
   return (
-    <div>
-      <h1>Software anecdotes</h1>
-      <Menu anecdotes={anecdotes} />
-      {notification.length > 0 ? notification : <></>}
-      <Routes>
-        <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
-        <Route
-          path="/create"
-          element={
-            <CreateNew addNew={addNew} setNotification={setNotification} />
-          }
-        />
-        <Route path="/about" element={<About />} />
-        <Route
-          path="/anecdotes/:id"
-          element={<Anecdote anecdote={anecdote} />}
-        />
-      </Routes>
-      <Footer />
-    </div>
+    <Container>
+      <div>
+        <h1>Software anecdotes</h1>
+        <Menu anecdotes={anecdotes} />
+        {notification && <Alert severity="success">{notification}</Alert>}
+        <Routes>
+          <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
+          <Route
+            path="/create"
+            element={
+              <CreateNew addNew={addNew} setNotification={setNotification} />
+            }
+          />
+          <Route path="/about" element={<About />} />
+          <Route
+            path="/anecdotes/:id"
+            element={<Anecdote anecdote={anecdote} />}
+          />
+        </Routes>
+        <Footer />
+      </div>
+    </Container>
   );
 };
 
