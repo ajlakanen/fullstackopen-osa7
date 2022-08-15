@@ -11,23 +11,52 @@ import {
 } from "react-router-dom";
 import { useField } from "./hooks";
 
+import styled from "styled-components";
+
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`;
+
+const Input = styled.input`
+  margin: 0.25em;
+`;
+
+const Page = styled.div`
+  padding: 1em;
+  background: papayawhip;
+`;
+
+const Navigation = styled.div`
+  background: BurlyWood;
+  padding: 1em;
+`;
+
+const FooterStyle = styled.div`
+  background: Chocolate;
+  padding: 1em;
+  margin-top: 1em;
+`;
+
 const Menu = (props) => {
   const padding = {
     paddingRight: 5,
   };
   return (
     <>
-      <div>
-        <Link style={padding} to="/">
-          anecdotes
-        </Link>
-        <Link style={padding} to="/create">
-          create new
-        </Link>
-        <Link style={padding} to="/about">
-          about
-        </Link>
-      </div>
+      <Link style={padding} to="/">
+        anecdotes
+      </Link>
+      <Link style={padding} to="/create">
+        create new
+      </Link>
+      <Link style={padding} to="/about">
+        about
+      </Link>
     </>
   );
 };
@@ -82,14 +111,14 @@ const About = () => (
 );
 
 const Footer = () => (
-  <div>
+  <FooterStyle>
     Anecdote app for <a href="https://fullstackopen.com/">Full Stack Open</a>.
     See{" "}
     <a href="https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js">
       https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js
     </a>{" "}
     for the source code.
-  </div>
+  </FooterStyle>
 );
 
 const CreateNew = (props) => {
@@ -129,18 +158,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content.input} />
+          <Input {...content.input} />
         </div>
         <div>
           author
-          <input {...author.input} />
+          <Input {...author.input} />
         </div>
         <div>
           url for more info
-          <input {...info.input} />
+          <Input {...info.input} />
         </div>
-        <button>create</button>
-        <button onClick={handleResetclick}>reset</button>
+        <Button>create</Button>
+        <Button onClick={handleResetclick}>reset</Button>
       </form>
     </div>
   );
@@ -190,9 +219,11 @@ const App = () => {
     : null;
 
   return (
-    <div>
+    <Page>
       <h1>Software anecdotes</h1>
-      <Menu anecdotes={anecdotes} />
+      <Navigation>
+        <Menu anecdotes={anecdotes} />
+      </Navigation>
       {notification.length > 0 ? notification : <></>}
       <Routes>
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
@@ -209,7 +240,7 @@ const App = () => {
         />
       </Routes>
       <Footer />
-    </div>
+    </Page>
   );
 };
 

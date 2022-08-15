@@ -1,6 +1,21 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+import styled from "styled-components";
+
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`;
+
+const Input = styled.input`
+  margin: 0.25em;
+`;
+
 const useField = (type) => {
   const [value, setValue] = useState("");
 
@@ -67,8 +82,8 @@ const App = () => {
     <div>
       <h2>notes</h2>
       <form onSubmit={handleNoteSubmit}>
-        <input {...content} />
-        <button>create</button>
+        <Input {...content} />
+        <Button>create</Button>
       </form>
       {notes.map((n) => (
         <p key={n.id}>{n.content}</p>
@@ -76,9 +91,9 @@ const App = () => {
 
       <h2>persons</h2>
       <form onSubmit={handlePersonSubmit}>
-        name <input {...name} /> <br />
-        number <input {...number} />
-        <button>create</button>
+        name <Input {...name} /> <br />
+        number <Input {...number} />
+        <Button>create</Button>
       </form>
       {persons.map((n) => (
         <p key={n.id}>
