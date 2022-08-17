@@ -1,0 +1,74 @@
+h1 {
+  color: green;
+}
+
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.info {
+  color: black;
+  background: lightblue;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: black;
+  background: green;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.bloglist {
+  padding-left: 0px;
+}
+
+.blog {
+  padding-top: 10px;
+  padding-left: 2px;
+  border: solid 2px darkgray;
+  border-radius: 3px;
+  list-style-type: none;
+  margin-bottom: 5px;
+}
+
+.blog p {
+  display: inline;
+}
+
+.blog .span:not(.likes)::before {
+  content: "\A";
+  white-space: pre;
+}
+
+.blog .clicked {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+/* The animation code */
+@keyframes fade {
+  from {
+    background-color: lightseagreen;
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+.debug {
+  background-color: pink;
+}
