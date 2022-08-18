@@ -1,16 +1,21 @@
 /* eslint-disable no-unused-vars */
-import PropTypes from "prop-types";
-import React from "react";
+import { useSelector } from "react-redux";
 
 // entinen: export const Notification = (props) => {
-export const Notification = React.forwardRef((props, ref) => {
-  if (props.message === "") {
-    return null;
+const Notification = () => {
+  const notification = useSelector((state) => state.notification);
+
+  const style = {
+    border: "solid",
+    padding: 10,
+    borderWidth: 1,
+  };
+
+  if (notification !== "") {
+    return <div style={style}> {notification}</div>;
+  } else {
+    return <></>;
   }
-  return <div className={props.style}>{props.message}</div>;
-});
+};
 
-//};
-Notification.displayName = "Notification";
-
-Notification.propTypes = { message: PropTypes.string.isRequired };
+export default Notification;

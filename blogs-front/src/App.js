@@ -4,19 +4,16 @@ import { BlogForm } from "./components/BlogForm";
 import { Blog } from "./components/Blog";
 import { Filter } from "./components/Filter";
 import { LoginForm } from "./components/LoginForm";
-import { Notification } from "./components/Notification";
+import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import { setNotification } from "./reducers/notificationReducer";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [newFilter, setNewFilter] = useState("");
   const [loginVisible, setLoginVisible] = useState(false);
   const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState({
-    message: "",
-    style: "",
-  });
 
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => {
@@ -57,10 +54,10 @@ const App = () => {
             style: "error",
           });
         } else {
-          showNotification({
-            message: `Person '${person.name}' was already deleted from server`,
-            style: "error",
-          });
+          setNotification(
+            `Person '${person.name}' was already deleted from server`,
+            5
+          );
           setBlogs(blogs.filter((p) => p.id !== person.id));
         }
       });
@@ -75,19 +72,13 @@ const App = () => {
       setBlogs(blogs.map((b) => (b.id !== blog.id ? b : returnedBlog)));
       return true;
     } catch (error) {
-      showNotification({
-        message: `${error.response.data.error}`,
-        style: "error",
-      });
+      setNotification(`${error.response.data.error}`);
       return false;
     }
   };
 
   function tokenExpiredLogout() {
-    showNotification({
-      message: "Login expired, please wait, logging out...",
-      style: "error",
-    });
+    setNotification("Login expired, please wait, logging out...", 5);
     setTimeout(() => {
       setUser(null);
     }, 5000);
@@ -125,14 +116,12 @@ const App = () => {
     try {
       const returnedBlog = await blogService.create(blogObject);
       setBlogs(blogs.concat(returnedBlog));
-      showNotification({ message: "New blog added", style: "success" });
+      //showNotification({ message: "New blog added", style: "success" });
+      setNotification("New blog added", 5);
       return true;
     } catch (error) {
       if (error.response.data.error.includes("validation failed")) {
-        showNotification({
-          message: `${error.response.data.error}`,
-          style: "error",
-        });
+        setNotification(`${error.response.data.error}`, 5);
       }
       if (error.response.data.error.includes("token expired")) {
         tokenExpiredLogout();
@@ -141,15 +130,15 @@ const App = () => {
     }
   };
 
-  const showNotification = ({ message, style }) => {
-    setNotification({
-      message,
-      style,
-    });
-    setTimeout(() => {
-      setNotification({ message: "" });
-    }, 5000);
-  };
+  // const showNotification = ({ message, style }) => {
+  //   setNotification({
+  //     message,
+  //     style,
+  //   });
+  //   setTimeout(() => {
+  //     setNotification({ message: "" });
+  //   }, 5000);
+  // };
 
   /* TODO */
   const handleDeleteClick = async (blog) => {
@@ -159,10 +148,7 @@ const App = () => {
         await blogService.deleteBlog(blog.id);
         console.log("1");
         setBlogs(blogs.filter((p) => p.id !== blog.id));
-        showNotification({
-          message: "Blog deleted",
-          style: "info",
-        });
+        setNotification("Blog deleted", 5);
       } catch (error) {
         console.log(error);
         if (error.response.data.error.includes("token expired")) {
@@ -176,10 +162,7 @@ const App = () => {
     event.preventDefault();
 
     if (username.length === 0 || password.length === 0) {
-      showNotification({
-        message: "insert username and password",
-        style: "error",
-      });
+      setNotification("insert username and password", 5);
       return;
     }
 
@@ -193,18 +176,10 @@ const App = () => {
 
       blogService.setToken(user.token);
       setUser(user);
-      // setUsername("");
-      // setPassword("");
       setLoginVisible(false);
-      showNotification({
-        message: `${user.username} logged in`,
-        style: "success",
-      });
+      setNotification(`${user.username} logged in`, 5);
     } catch (exception) {
-      showNotification({
-        message: "wrong username or password",
-        style: "error",
-      });
+      setNotification("wrong username or password", 5);
     }
   };
 
@@ -238,10 +213,7 @@ const App = () => {
             window.localStorage.removeItem("loggedBlogAppUser");
             blogService.setToken(null);
             setUser(null);
-            showNotification({
-              message: "Logged out.",
-              style: "info",
-            });
+            setNotification("Logged out.", 5);
           }}
         >
           Logout
@@ -297,7 +269,7 @@ const App = () => {
   return (
     <div>
       <h1>Blogs</h1>
-      <Notification message={notification.message} style={notification.style} />
+      <Notification />
       <div>
         {user === null && loginForm()}
         {user !== null && loginInfo()}

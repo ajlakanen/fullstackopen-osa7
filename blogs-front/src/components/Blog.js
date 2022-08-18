@@ -1,8 +1,11 @@
+import { useDispatch } from "react-redux";
 import { useState } from "react";
+import { setNotification } from "../reducers/notificationReducer";
 
-export const Blog = ({ blog, handleLike, handleDelete, isOwner }) => {
+export const Blog = ({ blog, handleDelete, isOwner }) => {
   const [viewAllInfo, setViewAllInfo] = useState(false);
   const [likeStyle, setLikeStyle] = useState("likes");
+  const dispatch = useDispatch();
 
   const toggleView = () => {
     setViewAllInfo(!viewAllInfo);
@@ -46,15 +49,16 @@ export const Blog = ({ blog, handleLike, handleDelete, isOwner }) => {
             likes: <span className={likeStyle}>{blog.likes}</span>{" "}
             <button
               onClick={() => {
-                handleLike(blog);
-                if (likeStyle.includes("clicked")) {
-                  setLikeStyle("likes");
-                  setTimeout(() => {
-                    setLikeStyle("likes clicked");
-                  }, 10);
-                } else {
-                  setLikeStyle("likes clicked");
-                }
+                // handleLike(blog);
+                // if (likeStyle.includes("clicked")) {
+                //   setLikeStyle("likes");
+                //   setTimeout(() => {
+                //     setLikeStyle("likes clicked");
+                //   }, 10);
+                // } else {
+                //   setLikeStyle("likes clicked");
+                // }
+                dispatch(setNotification("liked", 5));
               }}
               name="like"
               aria-labelledby="like"
