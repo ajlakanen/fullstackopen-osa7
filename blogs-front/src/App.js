@@ -10,18 +10,22 @@ import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import { setNotification } from "./reducers/notificationReducer";
+import { useSelector } from "react-redux";
+import { initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  // const [blogs, setBlogs] = useState([]);
   const [newFilter, setNewFilter] = useState("");
   const [loginVisible, setLoginVisible] = useState(false);
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
+  // const blogs = useSelector((state) => state.blogs);
 
   useEffect(() => {
-    blogService.getAll().then((initialBlogs) => {
-      setBlogs(initialBlogs);
-    });
+    // blogService.getAll().then((initialBlogs) => {
+    //   setBlogs(initialBlogs);
+    // });
+    dispatch(initializeBlogs());
   }, []);
 
   useEffect(() => {
@@ -33,40 +37,43 @@ const App = () => {
     }
   }, []);
 
+  // TODO: MOdify existing blog
   // eslint-disable-next-line no-unused-vars
-  const modifyPhoneNumber = (person, newNumber) => {
-    const changedPerson = { ...person, number: newNumber };
-    blogService
-      .update(person.id, changedPerson)
-      .then((returnedPerson) => {
-        setBlogs(blogs.map((p) => (p.id !== person.id ? p : returnedPerson)));
-      })
-      .then(() => {
-        dispatch(setNotification("Number changed", 5));
-      })
-      .catch((error) => {
-        console.log(error);
-        if (error.response.data.error.includes("Validation failed")) {
-          dispatch(setNotification(`${error.response.data.error}`, 5));
-        } else {
-          dispatch(
-            setNotification(
-              `Person '${person.name}' was already deleted from server`,
-              5
-            )
-          );
-          setBlogs(blogs.filter((p) => p.id !== person.id));
-        }
-      });
-  };
+  // const modifyPhoneNumber = (person, newNumber) => {
+  //   const changedPerson = { ...person, number: newNumber };
+  //   blogService
+  //     .update(person.id, changedPerson)
+  //     .then((returnedPerson) => {
+  //       setBlogs(blogs.map((p) => (p.id !== person.id ? p : returnedPerson)));
+  //     })
+  //     .then(() => {
+  //       dispatch(setNotification("Number changed", 5));
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       if (error.response.data.error.includes("Validation failed")) {
+  //         dispatch(setNotification(`${error.response.data.error}`, 5));
+  //       } else {
+  //         dispatch(
+  //           setNotification(
+  //             `Person '${person.name}' was already deleted from server`,
+  //             5
+  //           )
+  //         );
+  //         setBlogs(blogs.filter((p) => p.id !== person.id));
+  //       }
+  //     });
+  // };
 
   const addLike = async (blog) => {
     try {
+      // eslint-disable-next-line no-unused-vars
       const returnedBlog = await blogService.update(blog.id.toString(), {
         ...blog,
         likes: blog.likes + 1,
       });
-      setBlogs(blogs.map((b) => (b.id !== blog.id ? b : returnedBlog)));
+      // TODO:
+      // setBlogs(blogs.map((b) => (b.id !== blog.id ? b : returnedBlog)));
       return true;
     } catch (error) {
       dispatch(setNotification(`${error.response.data.error}`), 5);
@@ -81,49 +88,6 @@ const App = () => {
     }, 5000);
   }
 
-  const addBlog = async ({ newTitle, newAuthor, newUrl }) => {
-    if (
-      newTitle.length === 0 ||
-      newAuthor.length === 0 ||
-      newUrl.length === 0
-    ) {
-      dispatch(setNotification("Title, author or url missing", 5));
-      return false;
-    }
-
-    // TODO: MODIFICATION OF EXISTING BLOG
-    // const existing = blogs.filter((blog) => blog.name === newTitle);
-    // if (existing.length > 0) {
-    //   if (window.confirm(`Replace ${newTitle} phone number?`)) {
-    //     modifyPhoneNumber(existing[0], newAuthor);
-    //     return;
-    //     // TODO: What happens when user presses cancel?
-    //   }
-    // }
-
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
-    };
-
-    try {
-      const returnedBlog = await blogService.create(blogObject);
-      setBlogs(blogs.concat(returnedBlog));
-      //showNotification({ message: "New blog added", style: "success" });
-      dispatch(setNotification("New blog added", 5));
-      return true;
-    } catch (error) {
-      if (error.response.data.error.includes("validation failed")) {
-        dispatch(setNotification(`${error.response.data.error}`, 5));
-      }
-      if (error.response.data.error.includes("token expired")) {
-        tokenExpiredLogout();
-      }
-      return false;
-    }
-  };
-
   /* TODO */
   const handleDeleteClick = async (blog) => {
     if (window.confirm(`Delete ${blog.title}`)) {
@@ -131,7 +95,8 @@ const App = () => {
         //const response =
         await blogService.deleteBlog(blog.id);
         console.log("1");
-        setBlogs(blogs.filter((p) => p.id !== blog.id));
+        // TODO:
+        // setBlogs(blogs.filter((p) => p.id !== blog.id));
         dispatch(setNotification("Blog deleted", 5));
       } catch (error) {
         console.log(error);
@@ -183,7 +148,7 @@ const App = () => {
   };
 
   const blogForm = () => {
-    return <BlogForm addBlog={addBlog} />;
+    return <BlogForm />;
   };
 
   const loginInfo = () => {
@@ -206,12 +171,13 @@ const App = () => {
     );
   };
 
-  const blogsToShow =
-    newFilter === ""
-      ? blogs
-      : blogs.filter((blog) =>
-          blog.title.toLowerCase().includes(newFilter.toLowerCase())
-        );
+  // TODO: filter
+  const blogsToShow = useSelector((state) => state.blogs);
+  // newFilter === ""
+  //   ? blogs
+  //   : blogs.filter((blog) =>
+  //       blog.title.toLowerCase().includes(newFilter.toLowerCase())
+  //     );
 
   const blogList = () => {
     return (
@@ -232,7 +198,7 @@ const App = () => {
         </p>
         <ul className="bloglist">
           {blogsToShow
-            .sort((a, b) => b.likes - a.likes)
+            //.sort((a, b) => b.likes - a.likes)
             .map((blog) => (
               <li key={blog.id}>
                 <Blog

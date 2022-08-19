@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setNotification } from "../reducers/notificationReducer";
+import { createBlog } from "../reducers/blogReducer";
 
-export const BlogForm = ({ addBlog }) => {
+export const BlogForm = () => {
   const [newTitle, setNewTitle] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
   const [newUrl, setNewUrl] = useState("");
@@ -11,13 +12,29 @@ export const BlogForm = ({ addBlog }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const success = await addBlog({ newTitle, newAuthor, newUrl });
-    if (success) {
+    // const success = await addBlog({ newTitle, newAuthor, newUrl });
+
+    if (
+      newTitle.length === 0 ||
+      newAuthor.length === 0 ||
+      newUrl.length === 0
+    ) {
+      dispatch(setNotification("Title, author or url missing", 5));
+      return false;
+    }
+
+    const response = dispatch(createBlog({ newTitle, newAuthor, newUrl }));
+    if (response) {
       setNewTitle("");
       setNewAuthor("");
       setNewUrl("");
       setFormVisible(false);
-      dispatch(setNotification("created"));
+      dispatch(setNotification("New blog added"), 5);
+    }
+    if (typeof response === "string" && response.includes("token expired")) {
+      // tokenExpiredLogout();
+      // TODO
+      console.log("token expired");
     }
   };
 
