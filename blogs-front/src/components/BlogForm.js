@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../reducers/notificationReducer";
 
 export const BlogForm = ({ addBlog }) => {
   const [newTitle, setNewTitle] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
   const [newUrl, setNewUrl] = useState("");
   const [formVisible, setFormVisible] = useState(false);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -14,6 +17,7 @@ export const BlogForm = ({ addBlog }) => {
       setNewAuthor("");
       setNewUrl("");
       setFormVisible(false);
+      dispatch(setNotification("created"));
     }
   };
 

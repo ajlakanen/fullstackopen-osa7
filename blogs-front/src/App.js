@@ -1,5 +1,7 @@
 /* eslint-disable indent */
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 import { BlogForm } from "./components/BlogForm";
 import { Blog } from "./components/Blog";
 import { Filter } from "./components/Filter";
@@ -14,6 +16,7 @@ const App = () => {
   const [newFilter, setNewFilter] = useState("");
   const [loginVisible, setLoginVisible] = useState(false);
   const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => {
@@ -39,24 +42,18 @@ const App = () => {
         setBlogs(blogs.map((p) => (p.id !== person.id ? p : returnedPerson)));
       })
       .then(() => {
-        setNotification({ message: "Number changed", style: "info" });
-      })
-      .then(() => {
-        setTimeout(() => {
-          setNotification({ message: null });
-        }, 5000);
+        dispatch(setNotification("Number changed", 5));
       })
       .catch((error) => {
         console.log(error);
         if (error.response.data.error.includes("Validation failed")) {
-          setNotification({
-            message: `${error.response.data.error}`,
-            style: "error",
-          });
+          dispatch(setNotification(`${error.response.data.error}`, 5));
         } else {
-          setNotification(
-            `Person '${person.name}' was already deleted from server`,
-            5
+          dispatch(
+            setNotification(
+              `Person '${person.name}' was already deleted from server`,
+              5
+            )
           );
           setBlogs(blogs.filter((p) => p.id !== person.id));
         }
@@ -72,13 +69,13 @@ const App = () => {
       setBlogs(blogs.map((b) => (b.id !== blog.id ? b : returnedBlog)));
       return true;
     } catch (error) {
-      setNotification(`${error.response.data.error}`);
+      dispatch(setNotification(`${error.response.data.error}`), 5);
       return false;
     }
   };
 
   function tokenExpiredLogout() {
-    setNotification("Login expired, please wait, logging out...", 5);
+    dispatch(setNotification("Login expired, please wait, logging out...", 5));
     setTimeout(() => {
       setUser(null);
     }, 5000);
@@ -90,10 +87,7 @@ const App = () => {
       newAuthor.length === 0 ||
       newUrl.length === 0
     ) {
-      setNotification({
-        message: "Title, author or url missing",
-        style: "error",
-      });
+      dispatch(setNotification("Title, author or url missing", 5));
       return false;
     }
 
@@ -117,11 +111,11 @@ const App = () => {
       const returnedBlog = await blogService.create(blogObject);
       setBlogs(blogs.concat(returnedBlog));
       //showNotification({ message: "New blog added", style: "success" });
-      setNotification("New blog added", 5);
+      dispatch(setNotification("New blog added", 5));
       return true;
     } catch (error) {
       if (error.response.data.error.includes("validation failed")) {
-        setNotification(`${error.response.data.error}`, 5);
+        dispatch(setNotification(`${error.response.data.error}`, 5));
       }
       if (error.response.data.error.includes("token expired")) {
         tokenExpiredLogout();
@@ -129,16 +123,6 @@ const App = () => {
       return false;
     }
   };
-
-  // const showNotification = ({ message, style }) => {
-  //   setNotification({
-  //     message,
-  //     style,
-  //   });
-  //   setTimeout(() => {
-  //     setNotification({ message: "" });
-  //   }, 5000);
-  // };
 
   /* TODO */
   const handleDeleteClick = async (blog) => {
@@ -148,7 +132,7 @@ const App = () => {
         await blogService.deleteBlog(blog.id);
         console.log("1");
         setBlogs(blogs.filter((p) => p.id !== blog.id));
-        setNotification("Blog deleted", 5);
+        dispatch(setNotification("Blog deleted", 5));
       } catch (error) {
         console.log(error);
         if (error.response.data.error.includes("token expired")) {
@@ -162,7 +146,7 @@ const App = () => {
     event.preventDefault();
 
     if (username.length === 0 || password.length === 0) {
-      setNotification("insert username and password", 5);
+      dispatch(setNotification("insert username and password", 5));
       return;
     }
 
@@ -177,9 +161,9 @@ const App = () => {
       blogService.setToken(user.token);
       setUser(user);
       setLoginVisible(false);
-      setNotification(`${user.username} logged in`, 5);
+      dispatch(setNotification(`${user.username} logged in`, 5));
     } catch (exception) {
-      setNotification("wrong username or password", 5);
+      dispatch(setNotification("wrong username or password", 5));
     }
   };
 
@@ -213,7 +197,7 @@ const App = () => {
             window.localStorage.removeItem("loggedBlogAppUser");
             blogService.setToken(null);
             setUser(null);
-            setNotification("Logged out.", 5);
+            dispatch(setNotification("Logged out.", 5));
           }}
         >
           Logout
