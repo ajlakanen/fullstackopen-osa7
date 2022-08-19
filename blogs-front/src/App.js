@@ -12,11 +12,11 @@ import loginService from "./services/login";
 import { setNotification } from "./reducers/notificationReducer";
 import { useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogReducer";
+import { setUser } from "./reducers/userReducer";
 
 const App = () => {
   const [newFilter, setNewFilter] = useState("");
   const [loginVisible, setLoginVisible] = useState(false);
-  const [user, setUser] = useState(null);
   const dispatch = useDispatch();
 
   // TODO: Logout when token expired
@@ -35,10 +35,12 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
+      dispatch(setUser(user));
       blogService.setToken(user.token);
     }
   }, []);
+
+  const user = useSelector((state) => state.user);
 
   // TODO: MOdify existing blog
   // eslint-disable-next-line no-unused-vars
@@ -83,9 +85,8 @@ const App = () => {
       });
 
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
-
       blogService.setToken(user.token);
-      setUser(user);
+      dispatch(setUser(user));
       setLoginVisible(false);
       dispatch(setNotification(`${user.username} logged in`, 5));
     } catch (exception) {
@@ -108,10 +109,6 @@ const App = () => {
     }
   };
 
-  const blogForm = () => {
-    return <BlogForm />;
-  };
-
   const loginInfo = () => {
     return (
       <p>
@@ -122,7 +119,7 @@ const App = () => {
           onClick={() => {
             window.localStorage.removeItem("loggedBlogAppUser");
             blogService.setToken(null);
-            setUser(null);
+            dispatch(setUser(null));
             dispatch(setNotification("Logged out.", 5));
           }}
         >
@@ -182,7 +179,7 @@ const App = () => {
       <div>
         {user === null && loginForm()}
         {user !== null && loginInfo()}
-        {user !== null && blogForm()}
+        {user !== null && <BlogForm />}
         {user !== null && blogList()}
       </div>
       <footer>
