@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { setNotification } from "../reducers/notificationReducer";
-import { like } from "../reducers/blogReducer";
+import { deleteBlog, like } from "../reducers/blogReducer";
 
-export const Blog = ({ blog, handleDelete, isOwner }) => {
+export const Blog = ({ blog, isOwner }) => {
   const [viewAllInfo, setViewAllInfo] = useState(false);
   const [likeStyle, setLikeStyle] = useState("likes");
   const dispatch = useDispatch();
@@ -12,6 +12,18 @@ export const Blog = ({ blog, handleDelete, isOwner }) => {
     setViewAllInfo(!viewAllInfo);
     setLikeStyle("likes");
   };
+
+  const handleDelete = (blog) => {
+    const result = dispatch(deleteBlog(blog));
+    if (result) dispatch(setNotification("Blog deleted", 5));
+    else if (typeof result === "string") {
+      if (result.response.data.error.includes("token expired")) {
+        // TODO: Logout when token expired
+        // tokenExpiredLogout();
+      }
+    }
+  };
+
   return (
     <div className="blog">
       <p
@@ -71,8 +83,9 @@ export const Blog = ({ blog, handleDelete, isOwner }) => {
         {isOwner && (
           <button
             onClick={() => {
-              console.log(blog);
-              handleDelete(blog);
+              if (window.confirm(`Delete ${blog.title}`)) {
+                handleDelete(blog);
+              }
             }}
           >
             delete

@@ -14,17 +14,20 @@ import { useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
-  // const [blogs, setBlogs] = useState([]);
   const [newFilter, setNewFilter] = useState("");
   const [loginVisible, setLoginVisible] = useState(false);
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
-  // const blogs = useSelector((state) => state.blogs);
+
+  // TODO: Logout when token expired
+  // function tokenExpiredLogout() {
+  //   dispatch(setNotification("Login expired, please wait, logging out...", 5));
+  //   setTimeout(() => {
+  //     setUser(null);
+  //   }, 5000);
+  // }
 
   useEffect(() => {
-    // blogService.getAll().then((initialBlogs) => {
-    //   setBlogs(initialBlogs);
-    // });
     dispatch(initializeBlogs());
   }, []);
 
@@ -64,32 +67,6 @@ const App = () => {
   //       }
   //     });
   // };
-
-  function tokenExpiredLogout() {
-    dispatch(setNotification("Login expired, please wait, logging out...", 5));
-    setTimeout(() => {
-      setUser(null);
-    }, 5000);
-  }
-
-  /* TODO */
-  const handleDeleteClick = async (blog) => {
-    if (window.confirm(`Delete ${blog.title}`)) {
-      try {
-        //const response =
-        await blogService.deleteBlog(blog.id);
-        console.log("1");
-        // TODO:
-        // setBlogs(blogs.filter((p) => p.id !== blog.id));
-        dispatch(setNotification("Blog deleted", 5));
-      } catch (error) {
-        console.log(error);
-        if (error.response.data.error.includes("token expired")) {
-          tokenExpiredLogout();
-        }
-      }
-    }
-  };
 
   const handleLogin = async (event, username, password) => {
     event.preventDefault();
@@ -187,7 +164,6 @@ const App = () => {
               <li key={blog.id}>
                 <Blog
                   blog={blog}
-                  handleDelete={handleDeleteClick}
                   isOwner={
                     blog.user ? blog.user.username === user.username : false
                   }

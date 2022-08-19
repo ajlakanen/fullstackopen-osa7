@@ -25,13 +25,33 @@ export const like = (blog) => {
         ...blog,
         likes: blog.likes + 1,
       });
-      dispatch(updateBlog({ id: blog.id, new: returnedBlog }));
+      dispatch(updateBlog(returnedBlog));
       return true;
     } catch (error) {
       return error.response.data.error;
     }
   };
 };
+
+export const deleteBlog = (blog) => {
+  return async (dispatch) => {
+    try {
+      await blogService.deleteBlog(blog.id);
+      const blogs = await blogService.getAll();
+      dispatch(setBlogs(blogs.filter((p) => p.id !== blog.id)));
+      return true;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  };
+};
+
+// const handleDeleteClick = async (blog) => {
+//   if (window.confirm(`Delete ${blog.title}`)) {
+//
+//   }
+// };
 
 export const createBlog = ({ newTitle, newAuthor, newUrl }) => {
   return async (dispatch) => {
@@ -59,13 +79,12 @@ const blogSlice = createSlice({
   initialState: [],
   reducers: {
     appendBlog(state, action) {
-      console.log("4");
       state.push(action.payload);
     },
 
     updateBlog(state, action) {
       return state.map((b) =>
-        b.id !== action.payload.id ? b : action.payload.new
+        b.id !== action.payload.id ? b : action.payload
       );
     },
 
