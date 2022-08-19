@@ -18,6 +18,21 @@ export const initializeBlogs = () => {
   };
 };
 
+export const like = (blog) => {
+  return async (dispatch) => {
+    try {
+      const returnedBlog = await blogService.update(blog.id.toString(), {
+        ...blog,
+        likes: blog.likes + 1,
+      });
+      dispatch(updateBlog({ id: blog.id, new: returnedBlog }));
+      return true;
+    } catch (error) {
+      return error.response.data.error;
+    }
+  };
+};
+
 export const createBlog = ({ newTitle, newAuthor, newUrl }) => {
   return async (dispatch) => {
     const blogObject = {
@@ -39,23 +54,6 @@ export const createBlog = ({ newTitle, newAuthor, newUrl }) => {
   };
 };
 
-// This is some template code for future work on voting
-// export const vote = (id) => {
-//   return async (dispatch) => {
-//     const anecdotesOriginal = await anecdoteService.getAll();
-//     const anecdoteToChange = anecdotesOriginal.find((a) => a.id === id);
-//     const changedAnecdote = {
-//       ...anecdoteToChange,
-//       votes: anecdoteToChange.votes + 1,
-//     };
-//     const response = await anecdoteService.update(id, changedAnecdote);
-//     const anecdotesChanged = anecdotesOriginal.map((a) =>
-//       a.id !== id ? a : { ...a, votes: a.votes + 1 }
-//     );
-//     dispatch(setBlogs(anecdotesChanged));
-//   };
-// };
-
 const blogSlice = createSlice({
   name: "blogs",
   initialState: [],
@@ -65,11 +63,17 @@ const blogSlice = createSlice({
       state.push(action.payload);
     },
 
+    updateBlog(state, action) {
+      return state.map((b) =>
+        b.id !== action.payload.id ? b : action.payload.new
+      );
+    },
+
     setBlogs(state, action) {
       return action.payload;
     },
   },
 });
 
-export const { appendBlog, setBlogs } = blogSlice.actions;
+export const { appendBlog, updateBlog, setBlogs } = blogSlice.actions;
 export default blogSlice.reducer;

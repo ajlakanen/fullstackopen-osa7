@@ -65,22 +65,6 @@ const App = () => {
   //     });
   // };
 
-  const addLike = async (blog) => {
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const returnedBlog = await blogService.update(blog.id.toString(), {
-        ...blog,
-        likes: blog.likes + 1,
-      });
-      // TODO:
-      // setBlogs(blogs.map((b) => (b.id !== blog.id ? b : returnedBlog)));
-      return true;
-    } catch (error) {
-      dispatch(setNotification(`${error.response.data.error}`), 5);
-      return false;
-    }
-  };
-
   function tokenExpiredLogout() {
     dispatch(setNotification("Login expired, please wait, logging out...", 5));
     setTimeout(() => {
@@ -203,7 +187,6 @@ const App = () => {
               <li key={blog.id}>
                 <Blog
                   blog={blog}
-                  handleLike={addLike}
                   handleDelete={handleDeleteClick}
                   isOwner={
                     blog.user ? blog.user.username === user.username : false

@@ -1,8 +1,9 @@
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { setNotification } from "../reducers/notificationReducer";
+import { like } from "../reducers/blogReducer";
 
-export const Blog = ({ blog, handleDelete, handleLike, isOwner }) => {
+export const Blog = ({ blog, handleDelete, isOwner }) => {
   const [viewAllInfo, setViewAllInfo] = useState(false);
   const [likeStyle, setLikeStyle] = useState("likes");
   const dispatch = useDispatch();
@@ -48,7 +49,8 @@ export const Blog = ({ blog, handleDelete, handleLike, isOwner }) => {
             likes: <span className={likeStyle}>{blog.likes}</span>{" "}
             <button
               onClick={() => {
-                handleLike(blog);
+                // handleLike(blog);
+                dispatch(like(blog));
                 // if (likeStyle.includes("clicked")) {
                 //   setLikeStyle("likes");
                 //   setTimeout(() => {
