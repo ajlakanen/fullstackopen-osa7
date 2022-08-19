@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useSelector } from "react-redux";
 
-// entinen: export const Notification = (props) => {
 const Notification = () => {
   const notification = useSelector((state) => state.notification);
 

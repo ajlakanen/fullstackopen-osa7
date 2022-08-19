@@ -19,7 +19,6 @@ export const Blog = ({ blog, handleDelete, handleLike, isOwner }) => {
         }}
       >
         {blog.author}: <strong>{blog.title}</strong>{" "}
-        <span className="debug">{isOwner.toString()}</span>
       </p>{" "}
       {!viewAllInfo && (
         <button onClick={() => toggleView()} name="view" aria-labelledby="view">
@@ -67,7 +66,7 @@ export const Blog = ({ blog, handleDelete, handleLike, isOwner }) => {
             </button>
           </span>
         )}
-        {isOwner ? (
+        {isOwner && (
           <button
             onClick={() => {
               console.log(blog);
@@ -76,8 +75,6 @@ export const Blog = ({ blog, handleDelete, handleLike, isOwner }) => {
           >
             delete
           </button>
-        ) : (
-          <></>
         )}
       </div>
     </div>
