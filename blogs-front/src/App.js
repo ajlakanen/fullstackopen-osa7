@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { BlogForm } from "./components/BlogForm";
-import { Blog } from "./components/Blog";
-import { Filter } from "./components/Filter";
+import { Bloglist } from "./components/Bloglist";
 import { LoginForm } from "./components/LoginForm";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
@@ -15,7 +14,6 @@ import { initializeBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
 
 const App = () => {
-  const [newFilter, setNewFilter] = useState("");
   const [loginVisible, setLoginVisible] = useState(false);
   const dispatch = useDispatch();
 
@@ -130,47 +128,11 @@ const App = () => {
   };
 
   // TODO: filter
-  const blogsToShow = useSelector((state) => state.blogs);
   // newFilter === ""
   //   ? blogs
   //   : blogs.filter((blog) =>
   //       blog.title.toLowerCase().includes(newFilter.toLowerCase())
   //     );
-
-  const blogList = () => {
-    return (
-      <>
-        <h2>Blogs</h2>
-        <Filter
-          value={newFilter}
-          onChange={(event) => setNewFilter(event.target.value)}
-        />
-        <p>
-          {newFilter.length === 0 ? (
-            <></>
-          ) : blogsToShow.length === 0 ? (
-            <>No results</>
-          ) : (
-            <span>Filter in use</span>
-          )}
-        </p>
-        <ul className="bloglist">
-          {blogsToShow
-            //.sort((a, b) => b.likes - a.likes)
-            .map((blog) => (
-              <li key={blog.id}>
-                <Blog
-                  blog={blog}
-                  isOwner={
-                    blog.user ? blog.user.username === user.username : false
-                  }
-                />{" "}
-              </li>
-            ))}
-        </ul>
-      </>
-    );
-  };
 
   return (
     <div>
@@ -180,7 +142,7 @@ const App = () => {
         {user === null && loginForm()}
         {user !== null && loginInfo()}
         {user !== null && <BlogForm />}
-        {user !== null && blogList()}
+        {user !== null && <Bloglist />}
       </div>
       <footer>
         <p>Bloglist app, Antti-Jussi Lakanen</p>
