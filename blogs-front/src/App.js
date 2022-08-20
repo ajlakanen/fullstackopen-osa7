@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { BlogForm } from "./components/BlogForm";
 import { Bloglist } from "./components/Bloglist";
+import { Users } from "./components/Users";
 import { LoginForm } from "./components/LoginForm";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
@@ -12,6 +13,8 @@ import { setNotification } from "./reducers/notificationReducer";
 import { useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
+
+import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
@@ -141,8 +144,21 @@ const App = () => {
       <div>
         {user === null && loginForm()}
         {user !== null && loginInfo()}
-        {user !== null && <BlogForm />}
-        {user !== null && <Bloglist />}
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              user && (
+                <>
+                  {" "}
+                  <BlogForm /> <Bloglist />{" "}
+                </>
+              )
+            }
+          />
+          <Route path="/users" element={<Users />} />
+        </Routes>
       </div>
       <footer>
         <p>Bloglist app, Antti-Jussi Lakanen</p>
