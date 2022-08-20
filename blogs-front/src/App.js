@@ -13,7 +13,7 @@ import { setNotification } from "./reducers/notificationReducer";
 import { useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
-
+// import { getAllUsers } from "./reducers/usersReducer";
 import { Routes, Route } from "react-router-dom";
 
 const App = () => {
@@ -137,6 +137,14 @@ const App = () => {
   //       blog.title.toLowerCase().includes(newFilter.toLowerCase())
   //     );
 
+  // const match = useMatch("/users/:id");
+  // const allUsers = getAllUsers();
+  // console.log("all users: ", allUsers);
+  //
+  // const userToBrowse = match
+  //   ? allUsers.find((a) => a.id === Number(match.params.id))
+  //   : null;
+
   return (
     <div>
       <h1>Blogs</h1>
@@ -157,7 +165,9 @@ const App = () => {
               )
             }
           />
-          <Route path="/users" element={<Users />} />
+          <Route path="/users" element={<Users />}>
+            <Route path=":id" element={<Users />} />
+          </Route>
         </Routes>
       </div>
       <footer>

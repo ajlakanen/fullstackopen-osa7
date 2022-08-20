@@ -1,32 +1,14 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { initializeUsers } from "../reducers/usersReducer";
+import { AllUsers } from "./AllUsers";
+import { useMatch } from "react-router-dom";
+import { User } from "./User";
 
 export const Users = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(initializeUsers());
-  }, []);
-  const users = useSelector((state) => state.users);
-
+  const match = useMatch("/users/:id");
+  match && console.log("match", match.params.id);
   return (
     <>
-      <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th> <th>Blogs created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((u) => (
-            <tr key={u.id}>
-              <td>{u.username}</td>
-              <td>{u.blogs.length}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {!match && <AllUsers />}
+      {match && <User userid={match.params.id} />}
     </>
   );
 };
