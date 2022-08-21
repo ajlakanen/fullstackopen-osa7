@@ -6,7 +6,8 @@ import { deleteBlog } from "../reducers/blogReducer";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { comment, like, selectBlog } from "../reducers/blogReducer";
+import { AddComment } from "../components/AddComment";
+import { addComment, like, selectBlog } from "../reducers/blogReducer";
 
 export const Blog = () => {
   const [commentVisible, setCommentVisible] = useState(false);
@@ -58,14 +59,18 @@ export const Blog = () => {
         </button>
         <button
           onClick={() => {
-            setCommentVisible(true);
-            // dispatch(comment({ blog: blogToDisplay, content: "test" }));
+            setCommentVisible(!commentVisible);
           }}
         >
           Comment
         </button>
       </p>
-      {commentVisible && <>asdf</>}
+      {commentVisible && (
+        <AddComment
+          blog={blogToDisplay}
+          hideCommentForm={() => setCommentVisible(false)}
+        />
+      )}
       <p>Added by {blogToDisplay.user.name}</p>
     </>
   );

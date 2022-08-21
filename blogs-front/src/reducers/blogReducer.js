@@ -37,13 +37,17 @@ export const like = (blog) => {
   };
 };
 
-export const comment = ({ blog, content }) => {
+export const addComment = ({ blog, content }) => {
   return async (dispatch) => {
     try {
-      console.log("comment", blog);
+      console.log("content", content);
       const returnedBlog = await blogService.comment(blog.id, content);
       console.log("returnedBlog", returnedBlog);
-      dispatch(null);
+      const blogs = await blogService.getAll();
+
+      dispatch(
+        setBlogs(blogs.map((b) => (b.id !== blog.id ? b : returnedBlog)))
+      );
     } catch (error) {
       console.log(error);
     }
