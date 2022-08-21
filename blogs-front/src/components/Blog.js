@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { comment, like, selectBlog } from "../reducers/blogReducer";
 
 export const Blog = () => {
+  const [commentVisible, setCommentVisible] = useState(false);
+
   const dispatch = useDispatch();
   const params = useParams();
   // const blogToDisplay = useSelector(
@@ -56,12 +58,14 @@ export const Blog = () => {
         </button>
         <button
           onClick={() => {
-            dispatch(comment({ blog: blogToDisplay, content: "test" }));
+            setCommentVisible(true);
+            // dispatch(comment({ blog: blogToDisplay, content: "test" }));
           }}
         >
           Comment
         </button>
       </p>
+      {commentVisible && <>asdf</>}
       <p>Added by {blogToDisplay.user.name}</p>
     </>
   );

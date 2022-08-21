@@ -72,22 +72,12 @@ blogsRouter.put("/:id", async (request, response, next) => {
 blogsRouter.post("/:id/comment", async (request, response, next) => {
   try {
     const blog = await Blog.findById(request.params.id);
-    console.log("request.params", request.params);
-    console.log("request.body", request.body);
-    console.log("blog", blog);
-    const updated = await Blog.findByIdAndUpdate(request.params.id, {
-      ...blog,
-      comments: blog.comments.concat("asdf"),
-    });
-    // const comment = new Comment({ ...request.body, blog: blog._id });
-    // const saved = await blog.save();
-    // user.blogs = user.blogs.concat(saved._id);
-    // await user.save();
-    // // Redundant find? Solve at some point
-    // const newBlog = await Blog.findById(saved.id).populate("user", {
-    //   username: 1,
-    //   name: 1,
-    // });
+    const updated = await Blog.findByIdAndUpdate(
+      request.params.id,
+      { comments: blog.comments.concat(request.body.content) },
+      { new: true, runValidators: true, context: "query" }
+    );
+
     response.status(201).json(updated);
   } catch (exception) {
     console.log("Comment posting exception");
