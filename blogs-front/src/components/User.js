@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 
 export const User = () => {
   let params = useParams();
-  console.log(params);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(initializeUsers());
@@ -21,16 +20,23 @@ export const User = () => {
     console.log("no user");
     return null;
   }
-  console.log("userToDisplay", userToDisplay);
 
   return (
     <>
       <p>
         <Link to="/users">All users</Link>
       </p>
-      <p>
-        {userToDisplay.username} {userToDisplay.id}
-      </p>
+      <h2>
+        {userToDisplay.name} ({userToDisplay.username})
+      </h2>
+      <h3>Added blogs</h3>
+      <div>
+        <ul>
+          {userToDisplay.blogs.map((b) => (
+            <li key={b.id}>{b.title}</li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 };
