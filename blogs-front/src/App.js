@@ -6,6 +6,7 @@ import { BlogForm } from "./components/BlogForm";
 import { Blog } from "./components/Blog";
 import { Bloglist } from "./components/Bloglist";
 import { User } from "./components/User";
+import { Menu } from "./components/Menu";
 import { LoginForm } from "./components/LoginForm";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
@@ -156,6 +157,7 @@ const App = () => {
 
   return (
     <div>
+      <Menu />
       <h1>Blogs</h1>
       <Notification />
       <div>
