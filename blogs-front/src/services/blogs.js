@@ -30,7 +30,7 @@ const like = async (id) => {
 
 const comment = async (id, content) => {
   console.log("blogService->content: ", content);
-  const response = await axios.post(`${baseUrl}/${id}/comment`, content);
+  const response = await axios.post(`${baseUrl}/${id}/comment`, { content });
   console.log("response", response);
   return response.data;
 };

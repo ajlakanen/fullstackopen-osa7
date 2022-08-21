@@ -24,6 +24,7 @@ blogsRouter.get("/:id", async (request, response, next) => {
   }
 });
 
+// Post a new blog
 blogsRouter.post("/", userExtractor, async (request, response, next) => {
   try {
     const user = await User.findById(request.user.id);
@@ -42,6 +43,7 @@ blogsRouter.post("/", userExtractor, async (request, response, next) => {
   }
 });
 
+// Give a like to a blog post
 // TODO: When updating title, author orl url, check identity
 blogsRouter.put("/:id", async (request, response, next) => {
   // const { title, author, url, likes } = request.body;
@@ -66,10 +68,12 @@ blogsRouter.put("/:id", async (request, response, next) => {
   }
 });
 
+// Post a comment
 blogsRouter.post("/:id/comment", async (request, response, next) => {
   try {
     const blog = await Blog.findById(request.params.id);
     console.log("request.params", request.params);
+    console.log("request.body", request.body);
     console.log("blog", blog);
     const updated = await Blog.findByIdAndUpdate(request.params.id, {
       ...blog,
