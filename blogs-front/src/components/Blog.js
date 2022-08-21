@@ -6,8 +6,10 @@ import { deleteBlog } from "../reducers/blogReducer";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { like } from "../reducers/blogReducer";
 
 export const Blog = () => {
+  const dispatch = useDispatch();
   const params = useParams();
   const blogToDisplay = useSelector(
     (state) => state.blogs.filter((b) => b.id === params.id)[0]
@@ -35,7 +37,19 @@ export const Blog = () => {
           {blogToDisplay.url}
         </a>
       </p>
-      <p>{blogToDisplay.likes} likes</p>
+      <p>
+        {blogToDisplay.likes} likes{" "}
+        <button
+          onClick={() => {
+            dispatch(like(blogToDisplay));
+            dispatch(setNotification("liked", 5));
+          }}
+          name="like"
+          aria-labelledby="like"
+        >
+          like
+        </button>
+      </p>
       <p>Added by {blogToDisplay.user.name}</p>
     </>
   );
