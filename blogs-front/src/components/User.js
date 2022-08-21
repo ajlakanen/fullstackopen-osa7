@@ -1,17 +1,9 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { initializeUsers } from "../reducers/usersReducer";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export const User = () => {
-  let params = useParams();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(initializeUsers());
-  }, []);
-
+  const params = useParams();
   const userToDisplay = useSelector(
     (state) => state.users.filter((u) => u.id === params.id)[0]
   );

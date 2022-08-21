@@ -17,6 +17,7 @@ import { setUser } from "./reducers/userReducer";
 // import { getAllUsers } from "./reducers/usersReducer";
 import { Routes, Route } from "react-router-dom";
 import { AllUsers } from "./components/AllUsers";
+import { initializeUsers } from "./reducers/usersReducer";
 
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
@@ -32,6 +33,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs());
+    dispatch(initializeUsers());
   }, []);
 
   useEffect(() => {
