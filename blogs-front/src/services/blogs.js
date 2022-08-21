@@ -28,6 +28,13 @@ const like = async (id) => {
   return response.data;
 };
 
+const comment = async (id, content) => {
+  console.log("blogService->content: ", content);
+  const response = await axios.post(`${baseUrl}/${id}/comment`, content);
+  console.log("response", response);
+  return response.data;
+};
+
 const update = async (id, newObject) => {
   const response = await axios.put(`${baseUrl}/${id}`, newObject);
   return response.data;
@@ -42,6 +49,7 @@ const deleteBlog = async (id) => {
 };
 
 export default {
+  comment,
   getAll,
   create,
   like,

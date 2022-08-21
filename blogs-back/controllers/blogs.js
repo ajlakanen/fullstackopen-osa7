@@ -66,6 +66,31 @@ blogsRouter.put("/:id", async (request, response, next) => {
   }
 });
 
+blogsRouter.post("/:id/comment", async (request, response, next) => {
+  try {
+    const blog = await Blog.findById(request.params.id);
+    console.log("request.params", request.params);
+    console.log("blog", blog);
+    const updated = await Blog.findByIdAndUpdate(request.params.id, {
+      ...blog,
+      comments: blog.comments.concat("asdf"),
+    });
+    // const comment = new Comment({ ...request.body, blog: blog._id });
+    // const saved = await blog.save();
+    // user.blogs = user.blogs.concat(saved._id);
+    // await user.save();
+    // // Redundant find? Solve at some point
+    // const newBlog = await Blog.findById(saved.id).populate("user", {
+    //   username: 1,
+    //   name: 1,
+    // });
+    response.status(201).json(updated);
+  } catch (exception) {
+    console.log("Comment posting exception");
+    next(exception);
+  }
+});
+
 blogsRouter.delete("/:id", userExtractor, async (request, response, next) => {
   try {
     const user = await User.findById(request.user.id);

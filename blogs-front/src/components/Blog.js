@@ -6,7 +6,7 @@ import { deleteBlog } from "../reducers/blogReducer";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { like, selectBlog } from "../reducers/blogReducer";
+import { comment, like, selectBlog } from "../reducers/blogReducer";
 
 export const Blog = () => {
   const dispatch = useDispatch();
@@ -53,6 +53,13 @@ export const Blog = () => {
           aria-labelledby="like"
         >
           like
+        </button>
+        <button
+          onClick={() => {
+            dispatch(comment({ blog: blogToDisplay, content: "test" }));
+          }}
+        >
+          Comment
         </button>
       </p>
       <p>Added by {blogToDisplay.user.name}</p>

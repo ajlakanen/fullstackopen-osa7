@@ -37,6 +37,19 @@ export const like = (blog) => {
   };
 };
 
+export const comment = ({ blog, content }) => {
+  return async (dispatch) => {
+    try {
+      console.log("comment", blog);
+      const returnedBlog = await blogService.comment(blog.id, content);
+      console.log("returnedBlog", returnedBlog);
+      dispatch(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const deleteBlog = (blog) => {
   return async (dispatch) => {
     try {
