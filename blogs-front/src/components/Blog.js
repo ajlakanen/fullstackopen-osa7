@@ -15,7 +15,7 @@ export const Blog = () => {
   //   (state) => state.blogs.filter((b) => b.id === params.id)[0]
   // );
 
-  const blogToDisplay = selectBlog(params.id);
+  const blogToDisplay = useSelector(selectBlog(params.id));
 
   if (!blogToDisplay) {
     return null;

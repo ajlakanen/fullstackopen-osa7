@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import blogService from "../services/blogs";
-import { useSelector } from "react-redux";
 
 // const getId = () => (100000 * Math.random()).toFixed(0);
 
@@ -19,8 +18,8 @@ export const getBlogs = () => {
   };
 };
 
-export const selectBlog = (id) => {
-  useSelector((state) => state.blogs.filter((b) => b.id === id)[0]);
+export const selectBlog = (id) => (state) => {
+  return state.blogs.filter((b) => b.id === id)[0];
 };
 
 export const like = (blog) => {
