@@ -34,7 +34,9 @@ export const Blog = () => {
 
   return (
     <>
-      <h2>{blogToDisplay.title}</h2>
+      <h2>
+        {blogToDisplay.title} by {blogToDisplay.author}
+      </h2>
       <p>
         <a href={blogToDisplay.url} target="_blank" rel="noreferrer">
           {blogToDisplay.url}

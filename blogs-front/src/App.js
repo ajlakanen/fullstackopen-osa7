@@ -16,13 +16,14 @@ import { useSelector } from "react-redux";
 import { getBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
 // import { getAllUsers } from "./reducers/usersReducer";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { AllUsers } from "./components/AllUsers";
 import { initializeUsers } from "./reducers/usersReducer";
 
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // TODO: Logout when token expired
   // function tokenExpiredLogout() {
@@ -40,13 +41,13 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      dispatch(setUser(user));
-      blogService.setToken(user.token);
+      const currentUser = JSON.parse(loggedUserJSON);
+      dispatch(setUser(currentUser));
+      blogService.setToken(currentUser.token);
     }
   }, []);
 
-  const user = useSelector((state) => state.user);
+  const currentUser = useSelector((state) => state.user);
 
   // TODO: MOdify existing blog
   // eslint-disable-next-line no-unused-vars
@@ -118,7 +119,7 @@ const App = () => {
   const loginInfo = () => {
     return (
       <p>
-        {user.name} ({user.username}) logged in.{" "}
+        {currentUser.name} ({currentUser.username}) logged in.{" "}
         <button
           name="logout"
           aria-labelledby="logout"
@@ -127,6 +128,7 @@ const App = () => {
             blogService.setToken(null);
             dispatch(setUser(null));
             dispatch(setNotification("Logged out.", 5));
+            navigate("/");
           }}
         >
           Logout
@@ -155,39 +157,44 @@ const App = () => {
   //   ? allUsers.find((a) => a.id === Number(match.params.id))
   //   : null;
 
-  return (
-    <div>
-      <Menu />
-      <h1>Blogs</h1>
-      <Notification />
+  if (!currentUser)
+    return (
+      <>
+        <h1>Blogs</h1>
+        {loginForm()}
+      </>
+    );
+  else
+    return (
       <div>
-        {user === null && loginForm()}
-        {user !== null && loginInfo()}
+        <Menu currentUser={currentUser} />
+        <h1>Blogs</h1>
+        <Notification />
+        <div>
+          {loginInfo()}
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              user && (
+          <Routes>
+            <Route
+              path="/"
+              element={
                 <>
                   {" "}
                   <BlogForm /> <Bloglist />{" "}
                 </>
-              )
-            }
-          />
-          <Route path="/users">
-            <Route index element={<AllUsers />} />
-            <Route path=":id" element={<User />} />
-          </Route>
-          <Route path="/blogs/:id" element={<Blog />} />
-        </Routes>
+              }
+            />
+            <Route path="/users">
+              <Route index element={<AllUsers />} />
+              <Route path=":id" element={<User />} />
+            </Route>
+            <Route path="/blogs/:id" element={<Blog />} />
+          </Routes>
+        </div>
+        <footer>
+          <p>Bloglist app, Antti-Jussi Lakanen</p>
+        </footer>
       </div>
-      <footer>
-        <p>Bloglist app, Antti-Jussi Lakanen</p>
-      </footer>
-    </div>
-  );
+    );
 };
 
 export default App;
