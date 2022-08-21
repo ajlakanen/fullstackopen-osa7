@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { BlogForm } from "./components/BlogForm";
 import { Bloglist } from "./components/Bloglist";
-import { Users } from "./components/Users";
+import { User } from "./components/User";
 import { LoginForm } from "./components/LoginForm";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
@@ -15,6 +15,7 @@ import { initializeBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
 // import { getAllUsers } from "./reducers/usersReducer";
 import { Routes, Route } from "react-router-dom";
+import { AllUsers } from "./components/AllUsers";
 
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
@@ -165,8 +166,9 @@ const App = () => {
               )
             }
           />
-          <Route path="/users" element={<Users />}>
-            <Route path=":id" element={<Users />} />
+          <Route path="/users">
+            <Route index element={<AllUsers />} />
+            <Route path=":id" element={<User />} />
           </Route>
         </Routes>
       </div>
