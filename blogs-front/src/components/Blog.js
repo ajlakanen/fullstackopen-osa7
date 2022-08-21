@@ -6,14 +6,17 @@ import { deleteBlog } from "../reducers/blogReducer";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { like } from "../reducers/blogReducer";
+import { like, selectBlog } from "../reducers/blogReducer";
 
 export const Blog = () => {
   const dispatch = useDispatch();
   const params = useParams();
-  const blogToDisplay = useSelector(
-    (state) => state.blogs.filter((b) => b.id === params.id)[0]
-  );
+  // const blogToDisplay = useSelector(
+  //   (state) => state.blogs.filter((b) => b.id === params.id)[0]
+  // );
+
+  const blogToDisplay = selectBlog(params.id);
+
   if (!blogToDisplay) {
     return null;
   }

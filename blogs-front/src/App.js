@@ -12,7 +12,7 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import { setNotification } from "./reducers/notificationReducer";
 import { useSelector } from "react-redux";
-import { initializeBlogs } from "./reducers/blogReducer";
+import { getBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
 // import { getAllUsers } from "./reducers/usersReducer";
 import { Routes, Route } from "react-router-dom";
@@ -32,7 +32,7 @@ const App = () => {
   // }
 
   useEffect(() => {
-    dispatch(initializeBlogs());
+    dispatch(getBlogs());
     dispatch(initializeUsers());
   }, []);
 
