@@ -1,33 +1,12 @@
 import { Filter } from "./Filter";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Blog } from "./BlogOld";
 
 export const Bloglist = () => {
   const [newFilter, setNewFilter] = useState("");
   const blogsToShow = useSelector((state) => state.blogs);
-  // const user = useSelector((state) => state.user);
-  // const [viewAllInfo, setViewAllInfo] = useState(false);
-
-  // const toggleView = () => {
-  //   setViewAllInfo(!viewAllInfo);
-  // };
-  const blogItem = (blog) => {
-    return (
-      <div className="blog">
-        <Link to={`blogs/${blog.id}`}>
-          {blog.author}: <strong>{blog.title}</strong>
-        </Link>{" "}
-      </div>
-    );
-  };
-
-  // <Blog
-  //   blog={blog}
-  //   isOwner={
-  //     blog.user ? blog.user.username === user.username : false
-  //   }
-  // />{" "}
+  const user = useSelector((state) => state.user);
 
   return (
     <>
@@ -49,7 +28,14 @@ export const Bloglist = () => {
         {blogsToShow
           //.sort((a, b) => b.likes - a.likes)
           .map((blog) => (
-            <li key={blog.id}> {blogItem(blog)}</li>
+            <li key={blog.id}>
+              <Blog
+                blog={blog}
+                isOwner={
+                  blog.user ? blog.user.username === user.username : false
+                }
+              />{" "}
+            </li>
           ))}
       </ul>
     </>
