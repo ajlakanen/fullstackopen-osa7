@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { setNotification } from "../reducers/notificationReducer";
 import { deleteBlog } from "../reducers/blogReducer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { AddComment } from "../components/AddComment";
@@ -14,29 +14,37 @@ export const Blog = () => {
 
   const dispatch = useDispatch();
   const params = useParams();
+  const navigate = useNavigate();
+
   // const blogToDisplay = useSelector(
   //   (state) => state.blogs.filter((b) => b.id === params.id)[0]
   // );
 
+  const currentUser = useSelector((state) => state.user);
   const blogToDisplay = useSelector(selectBlog(params.id));
 
   if (!blogToDisplay) {
     return null;
   }
   // TODO: Delete
-  // const handleDelete = (blog) => {
-  //   const result = dispatch(deleteBlog(blog));
-  //   if (result) dispatch(setNotification("Blog deleted", 5));
-  //   else if (typeof result === "string") {
-  //     if (result.response.data.error.includes("token expired")) {
-  //       // TODO: Logout when token expired
-  //       // tokenExpiredLogout();
-  //     }
-  //   }
-  // };
+  const handleDelete = (blog) => {
+    const result = dispatch(deleteBlog(blog));
+    if (result) {
+      dispatch(setNotification("Blog deleted", 5));
+      navigate("/");
+    } else if (typeof result === "string") {
+      if (result.response.data.error.includes("token expired")) {
+        // TODO: Logout when token expired
+        // tokenExpiredLogout();
+      }
+    }
+    console.log(result);
+  };
 
   return (
     <>
+      CurrentUser : {currentUser.username}{" "}
+      {currentUser.username === blogToDisplay.user.username ? "true" : "false"}
       <h2>
         {blogToDisplay.title} by {blogToDisplay.author}
       </h2>
@@ -71,7 +79,22 @@ export const Blog = () => {
           hideCommentForm={() => setCommentVisible(false)}
         />
       )}
-      <p>Added by {blogToDisplay.user.name}</p>
+      {currentUser.username === blogToDisplay.user.username && (
+        <button
+          onClick={() => {
+            // dispatch(like(blogToDisplay));
+            // dispatch(setNotification("liked", 5));
+            handleDelete(blogToDisplay);
+          }}
+          name="delete"
+          aria-labelledby="delete"
+        >
+          delete
+        </button>
+      )}
+      <p>
+        Added by {blogToDisplay.user.name} ({blogToDisplay.user.username})
+      </p>
     </>
   );
 };

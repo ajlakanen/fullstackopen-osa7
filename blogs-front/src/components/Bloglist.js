@@ -47,7 +47,8 @@ export const Bloglist = () => {
       </p>
       <ul className="bloglist">
         {blogsToShow
-          //.sort((a, b) => b.likes - a.likes)
+          .slice()
+          .sort((a, b) => b.likes - a.likes)
           .map((blog) => (
             <li key={blog.id}> {blogItem(blog)}</li>
           ))}
