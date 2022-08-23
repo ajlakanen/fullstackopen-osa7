@@ -1,13 +1,14 @@
-/* eslint-disable no-unused-vars */
-import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { setNotification } from "../reducers/notificationReducer";
-import { deleteBlog } from "../reducers/blogReducer";
-import { Link, useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 import { AddComment } from "../components/AddComment";
-import { addComment, like, selectBlog } from "../reducers/blogReducer";
+import { Comments } from "./Comments";
+
+import { deleteBlog, like, selectBlog } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 export const Blog = () => {
   const [commentVisible, setCommentVisible] = useState(false);
@@ -65,20 +66,7 @@ export const Blog = () => {
         >
           like
         </button>
-        <button
-          onClick={() => {
-            setCommentVisible(!commentVisible);
-          }}
-        >
-          Comment
-        </button>
       </p>
-      {commentVisible && (
-        <AddComment
-          blog={blogToDisplay}
-          hideCommentForm={() => setCommentVisible(false)}
-        />
-      )}
       {currentUser.username === blogToDisplay.user.username && (
         <button
           onClick={() => {
@@ -91,6 +79,20 @@ export const Blog = () => {
         >
           delete
         </button>
+      )}
+      <Comments blog={blogToDisplay} />
+      <button
+        onClick={() => {
+          setCommentVisible(!commentVisible);
+        }}
+      >
+        Add a comment
+      </button>
+      {commentVisible && (
+        <AddComment
+          blog={blogToDisplay}
+          hideCommentForm={() => setCommentVisible(false)}
+        />
       )}
       <p>
         Added by {blogToDisplay.user.name} ({blogToDisplay.user.username})

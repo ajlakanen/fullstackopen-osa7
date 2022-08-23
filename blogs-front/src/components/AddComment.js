@@ -33,7 +33,7 @@ export const AddComment = ({ blog, hideCommentForm }) => {
           content
           <input {...content.input} />
         </div>
-        <button>create</button>
+        <button>Save</button>
         <button onClick={handleCancelClick}>cancel</button>
       </form>
     </div>
