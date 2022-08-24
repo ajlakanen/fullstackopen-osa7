@@ -15,7 +15,6 @@ import { setNotification } from "./reducers/notificationReducer";
 import { useSelector } from "react-redux";
 import { getBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
-// import { getAllUsers } from "./reducers/usersReducer";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { AllUsers } from "./components/AllUsers";
 import { initializeUsers } from "./reducers/usersReducer";
@@ -116,25 +115,25 @@ const App = () => {
     }
   };
 
-  const loginInfo = () => {
-    return (
-      <p>
-        {currentUser.name} ({currentUser.username}) logged in.{" "}
-        <button
-          name="logout"
-          aria-labelledby="logout"
-          onClick={() => {
-            window.localStorage.removeItem("loggedBlogAppUser");
-            blogService.setToken(null);
-            dispatch(setUser(null));
-            dispatch(setNotification("Logged out.", 5));
-            navigate("/");
-          }}
-        >
-          Logout
-        </button>
-      </p>
-    );
+  const handleLogout = () => {
+    //   return (
+    //     <p>
+    //       {currentUser.name} ({currentUser.username}) logged in.{" "}
+    //       <button
+    //         name="logout"
+    //         aria-labelledby="logout"
+    //         onClick={() => {
+    window.localStorage.removeItem("loggedBlogAppUser");
+    blogService.setToken(null);
+    dispatch(setUser(null));
+    dispatch(setNotification("Logged out.", 5));
+    navigate("/");
+    //         }}
+    //       >
+    //         Logout
+    //       </button>
+    //     </p>
+    //   );
   };
 
   // const match = useMatch("/blogs/:id");
@@ -167,12 +166,10 @@ const App = () => {
   else
     return (
       <div>
-        <Menu currentUser={currentUser} />
+        <Menu currentUser={currentUser} handleLogout={handleLogout} />
         <h1>Blogs</h1>
         <Notification />
         <div>
-          {loginInfo()}
-
           <Routes>
             <Route
               path="/"

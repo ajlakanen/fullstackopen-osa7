@@ -2,6 +2,15 @@ import { Filter } from "./Filter";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 export const Bloglist = () => {
   const [newFilter, setNewFilter] = useState("");
@@ -9,29 +18,8 @@ export const Bloglist = () => {
   // const user = useSelector((state) => state.user);
   // const [viewAllInfo, setViewAllInfo] = useState(false);
 
-  // const toggleView = () => {
-  //   setViewAllInfo(!viewAllInfo);
-  // };
-  const blogItem = (blog) => {
-    return (
-      <div className="blog">
-        <Link to={`blogs/${blog.id}`}>
-          {blog.author}: <strong>{blog.title}</strong>
-        </Link>{" "}
-      </div>
-    );
-  };
-
-  // <Blog
-  //   blog={blog}
-  //   isOwner={
-  //     blog.user ? blog.user.username === user.username : false
-  //   }
-  // />{" "}
-
   return (
     <>
-      <h2>Blogs</h2>
       <Filter
         value={newFilter}
         onChange={(event) => setNewFilter(event.target.value)}
@@ -45,14 +33,30 @@ export const Bloglist = () => {
           <span>Filter in use</span>
         )}
       </p>
-      <ul className="bloglist">
-        {blogsToShow
-          .slice()
-          .sort((a, b) => b.likes - a.likes)
-          .map((blog) => (
-            <li key={blog.id}> {blogItem(blog)}</li>
-          ))}
-      </ul>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Author</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {blogsToShow
+              .slice()
+              .sort((a, b) => b.likes - a.likes)
+              .map((blog) => (
+                <TableRow key={blog.id}>
+                  <TableCell>
+                    <Link to={`blogs/${blog.id}`}>{blog.title}</Link>{" "}
+                  </TableCell>
+                  <TableCell>{blog.author}</TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 };
