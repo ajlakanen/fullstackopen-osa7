@@ -6,6 +6,7 @@ import { BlogForm } from "./components/BlogForm";
 import { Blog } from "./components/Blog";
 import { Bloglist } from "./components/Bloglist";
 import { User } from "./components/User";
+import { Logout } from "./components/Logout";
 import { Menu } from "./components/Menu";
 import { LoginForm } from "./components/LoginForm";
 import Notification from "./components/Notification";
@@ -185,6 +186,10 @@ const App = () => {
               <Route path=":id" element={<User />} />
             </Route>
             <Route path="/blogs/:id" element={<Blog />} />
+            <Route
+              path="/logout"
+              element={<Logout handleLogout={handleLogout} />}
+            />
           </Routes>
         </div>
         <footer>

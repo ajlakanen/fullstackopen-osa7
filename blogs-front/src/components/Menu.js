@@ -1,22 +1,28 @@
 import { Link } from "react-router-dom";
+import { AppBar, Toolbar, IconButton, Button } from "@mui/material";
 
-export const Menu = ({ currentUser, handleLogout }) => {
+export const Menu = ({ currentUser }) => {
   return (
     <>
-      <div>
-        <Link to="/">blogs</Link>
-        <Link to="/users">users</Link>
-        {currentUser.name} ({currentUser.username}) logged in
-        <button
-          name="logout"
-          aria-labelledby="logout"
-          onClick={() => {
-            handleLogout();
-          }}
-        >
-          Logout
-        </button>
-      </div>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+          ></IconButton>
+          <Button color="inherit" component={Link} to="/">
+            blogs{" "}
+          </Button>
+          <Button color="inherit" component={Link} to="/users">
+            users
+          </Button>
+          {currentUser.name} ({currentUser.username}) logged in
+          <Button color="inherit" component={Link} to="/logout">
+            logout
+          </Button>
+        </Toolbar>
+      </AppBar>
     </>
   );
 };
