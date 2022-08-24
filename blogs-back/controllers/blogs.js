@@ -76,7 +76,10 @@ blogsRouter.post("/:id/comment", async (request, response, next) => {
       request.params.id,
       { comments: blog.comments.concat(request.body.content) },
       { new: true, runValidators: true, context: "query" }
-    );
+    ).populate("user", {
+      username: 1,
+      name: 1,
+    });
 
     response.status(201).json(updated);
   } catch (exception) {
