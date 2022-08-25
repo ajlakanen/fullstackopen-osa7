@@ -117,30 +117,12 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    //   return (
-    //     <p>
-    //       {currentUser.name} ({currentUser.username}) logged in.{" "}
-    //       <button
-    //         name="logout"
-    //         aria-labelledby="logout"
-    //         onClick={() => {
     window.localStorage.removeItem("loggedBlogAppUser");
     blogService.setToken(null);
     dispatch(setUser(null));
     dispatch(setNotification("Logged out.", 5));
     navigate("/");
-    //         }}
-    //       >
-    //         Logout
-    //       </button>
-    //     </p>
-    //   );
   };
-
-  // const match = useMatch("/blogs/:id");
-  // const selectedBlog = match
-  //   ? state.blogs.find((b) => b.id === Number(match.params.id))
-  //   : null;
 
   // TODO: filter
   // newFilter === ""
