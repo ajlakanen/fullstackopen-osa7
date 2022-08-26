@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { setNotification } from "../reducers/notificationReducer";
+import { showNotification } from "../reducers/notificationReducer";
 import { deleteBlog, like } from "../reducers/blogReducer";
 
 export const Blog = ({ blog, isOwner }) => {
@@ -15,7 +15,7 @@ export const Blog = ({ blog, isOwner }) => {
 
   const handleDelete = (blog) => {
     const result = dispatch(deleteBlog(blog));
-    if (result) dispatch(setNotification("Blog deleted", 5));
+    if (result) dispatch(showNotification("Blog deleted", 5));
     else if (typeof result === "string") {
       if (result.response.data.error.includes("token expired")) {
         // TODO: Logout when token expired
@@ -71,7 +71,7 @@ export const Blog = ({ blog, isOwner }) => {
                 // } else {
                 //   setLikeStyle("likes clicked");
                 // }
-                dispatch(setNotification("liked", 5));
+                dispatch(showNotification("liked", 5));
               }}
               name="like"
               aria-labelledby="like"

@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { BlogForm } from "./components/BlogForm";
 import { Blog } from "./components/Blog";
 import { Bloglist } from "./components/Bloglist";
 import { User } from "./components/User";
@@ -12,13 +11,14 @@ import { LoginForm } from "./components/LoginForm";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-import { setNotification } from "./reducers/notificationReducer";
+import { showNotification } from "./reducers/notificationReducer";
 import { useSelector } from "react-redux";
 import { getBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { AllUsers } from "./components/AllUsers";
 import { initializeUsers } from "./reducers/usersReducer";
+import { Button } from "@mui/material";
 
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
@@ -27,7 +27,7 @@ const App = () => {
 
   // TODO: Logout when token expired
   // function tokenExpiredLogout() {
-  //   dispatch(setNotification("Login expired, please wait, logging out...", 5));
+  //   dispatch(showNotification("Login expired, please wait, logging out...", 5));
   //   setTimeout(() => {
   //     setUser(null);
   //   }, 5000);
@@ -59,15 +59,15 @@ const App = () => {
   //       setBlogs(blogs.map((p) => (p.id !== person.id ? p : returnedPerson)));
   //     })
   //     .then(() => {
-  //       dispatch(setNotification("Number changed", 5));
+  //       dispatch(showNotification("Number changed", 5));
   //     })
   //     .catch((error) => {
   //       console.log(error);
   //       if (error.response.data.error.includes("Validation failed")) {
-  //         dispatch(setNotification(`${error.response.data.error}`, 5));
+  //         dispatch(showNotification(`${error.response.data.error}`, 5));
   //       } else {
   //         dispatch(
-  //           setNotification(
+  //           showNotification(
   //             `Person '${person.name}' was already deleted from server`,
   //             5
   //           )
@@ -81,7 +81,7 @@ const App = () => {
     event.preventDefault();
 
     if (username.length === 0 || password.length === 0) {
-      dispatch(setNotification("insert username and password", 5));
+      dispatch(showNotification("insert username and password", "error", 5));
       return;
     }
 
@@ -95,9 +95,9 @@ const App = () => {
       blogService.setToken(user.token);
       dispatch(setUser(user));
       setLoginVisible(false);
-      dispatch(setNotification(`${user.username} logged in`, 5));
+      dispatch(showNotification(`${user.username} logged in`, "success", 5));
     } catch (exception) {
-      dispatch(setNotification("wrong username or password", 5));
+      dispatch(showNotification("wrong username or password", "error", 5));
     }
   };
 
@@ -112,7 +112,11 @@ const App = () => {
         <LoginForm handleSubmit={handleLogin} handleCancel={handleCancel} />
       );
     } else {
-      return <button onClick={() => setLoginVisible(true)}>login</button>;
+      return (
+        <Button variant="contained" onClick={() => setLoginVisible(true)}>
+          login
+        </Button>
+      );
     }
   };
 
@@ -120,8 +124,8 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogAppUser");
     blogService.setToken(null);
     dispatch(setUser(null));
-    dispatch(setNotification("Logged out.", 5));
     navigate("/");
+    dispatch(showNotification("Logging out...", "info", 5));
   };
 
   // TODO: filter
@@ -143,6 +147,8 @@ const App = () => {
     return (
       <>
         <h1>Blogs</h1>
+        <Notification />
+
         {loginForm()}
       </>
     );
@@ -150,7 +156,6 @@ const App = () => {
     return (
       <div>
         <Menu currentUser={currentUser} handleLogout={handleLogout} />
-        <h1>Blogs</h1>
         <Notification />
         <div>
           <Routes>
@@ -159,7 +164,7 @@ const App = () => {
               element={
                 <>
                   {" "}
-                  <BlogForm /> <Bloglist />{" "}
+                  <Bloglist />{" "}
                 </>
               }
             />

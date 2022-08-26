@@ -1,44 +1,38 @@
 import { useState } from "react";
-
+import { Button, TextField } from "@mui/material";
 export const LoginForm = ({ handleSubmit, handleCancel }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   return (
     <div>
-      <h1>Login</h1>
       <form
         onSubmit={(event) => {
           handleSubmit(event, username, password);
         }}
       >
         <p>
-          username:{" "}
-          <input
-            type="text"
-            id="username"
-            name="username"
-            aria-labelledby="username"
+          <TextField
+            label="username:"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
           />
         </p>
         <p>
-          password{" "}
-          <input
+          <TextField
+            label="password"
             type="password"
-            id="password"
-            name="password"
-            aria-labelledby="password"
             autoComplete="on"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
         </p>
-        <button id="login-button" type="submit">
+        <Button variant="contained" id="login-button" type="submit">
           login
-        </button>
-        <button onClick={handleCancel}>cancel</button>
+        </Button>{" "}
+        <Button variant="outlined" onClick={handleCancel}>
+          cancel
+        </Button>
       </form>
     </div>
   );

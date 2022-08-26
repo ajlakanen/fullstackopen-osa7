@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setNotification } from "../reducers/notificationReducer";
+import { showNotification } from "../reducers/notificationReducer";
 import { createBlog } from "../reducers/blogReducer";
+import { Button, TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export const BlogForm = () => {
   const [newTitle, setNewTitle] = useState("");
@@ -9,6 +11,7 @@ export const BlogForm = () => {
   const [newUrl, setNewUrl] = useState("");
   const [formVisible, setFormVisible] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -19,22 +22,27 @@ export const BlogForm = () => {
       newAuthor.length === 0 ||
       newUrl.length === 0
     ) {
-      dispatch(setNotification("Title, author or url missing", 5));
+      dispatch(showNotification("Title, author or url missing", "success", 5));
       return false;
     }
 
-    const response = dispatch(createBlog({ newTitle, newAuthor, newUrl }));
+    const response = await dispatch(
+      createBlog({ newTitle, newAuthor, newUrl })
+    );
     if (response) {
       setNewTitle("");
       setNewAuthor("");
       setNewUrl("");
       setFormVisible(false);
-      dispatch(setNotification("New blog added"), 5);
+      dispatch(showNotification("New blog added", "success"), 5);
     }
     if (typeof response === "string" && response.includes("token expired")) {
       // tokenExpiredLogout();
       // TODO
       console.log("token expired");
+      navigate("/logout");
+    } else {
+      console.log(response);
     }
   };
 
@@ -49,51 +57,41 @@ export const BlogForm = () => {
         <h2>Add new blog</h2>
 
         <form onSubmit={handleSubmit}>
+          <TextField
+            label="Title"
+            value={newTitle}
+            onChange={(event) => setNewTitle(event.target.value)}
+          />
+          <TextField
+            label="Author"
+            value={newAuthor}
+            onChange={(event) => setNewAuthor(event.target.value)}
+          />
+          <TextField
+            label="URL"
+            value={newUrl}
+            onChange={(event) => setNewUrl(event.target.value)}
+          />
           <div>
-            title:{" "}
-            <input
-              id="title"
-              value={newTitle}
-              onChange={(event) => setNewTitle(event.target.value)}
-              placeholder="title"
-            />
-          </div>
-          <div>
-            author:{" "}
-            <input
-              id="author"
-              value={newAuthor}
-              onChange={(event) => setNewAuthor(event.target.value)}
-              placeholder="author"
-            />
-          </div>
-          <div>
-            url:{" "}
-            <input
-              id="url"
-              value={newUrl}
-              onChange={(event) => setNewUrl(event.target.value)}
-              placeholder="url"
-            />
-          </div>
-          <div>
-            <button name="save" aria-labelledby="save new blog" type="submit">
-              save
-            </button>
-            <button onClick={handleCancel}>cancel</button>
+            <Button variant="contained" color="primary" type="submit">
+              Save new blog
+            </Button>
+            <Button variant="outlined" onClick={handleCancel}>
+              cancel
+            </Button>
           </div>
         </form>
       </>
     );
   } else {
     return (
-      <button
+      <Button
         onClick={() => setFormVisible(true)}
         name="add new blog"
         aria-labelledby="add blog"
       >
         add new blog
-      </button>
+      </Button>
     );
   }
 };

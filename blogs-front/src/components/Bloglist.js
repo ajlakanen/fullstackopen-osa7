@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { Filter } from "./Filter";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -11,15 +12,24 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { BlogForm } from "./BlogForm";
 
 export const Bloglist = () => {
   const [newFilter, setNewFilter] = useState("");
-  const blogsToShow = useSelector((state) => state.blogs);
-  // const user = useSelector((state) => state.user);
-  // const [viewAllInfo, setViewAllInfo] = useState(false);
+  const allBlogs = useSelector((state) => state.blogs);
+  const blogsToShow =
+    newFilter === ""
+      ? allBlogs
+      : allBlogs
+          .slice()
+          .filter((blog) =>
+            blog.title.toLowerCase().includes(newFilter.toLowerCase())
+          );
 
   return (
     <>
+      <h1>Blogs</h1>
+      <BlogForm />
       <Filter
         value={newFilter}
         onChange={(event) => setNewFilter(event.target.value)}

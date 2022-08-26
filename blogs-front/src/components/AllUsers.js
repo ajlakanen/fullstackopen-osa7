@@ -5,7 +5,7 @@ export const AllUsers = () => {
   const users = useSelector((state) => state.users);
   return (
     <>
-      <h2>Users</h2>
+      <h1>Users</h1>
       <table>
         <thead>
           <tr>

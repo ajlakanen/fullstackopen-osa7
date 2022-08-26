@@ -1,6 +1,6 @@
 import { useField } from "../hooks";
 import { useDispatch } from "react-redux";
-import { setNotification } from "../reducers/notificationReducer";
+import { showNotification } from "../reducers/notificationReducer";
 import { addComment } from "../reducers/blogReducer";
 
 export const AddComment = ({ blog, hideCommentForm }) => {
@@ -15,7 +15,7 @@ export const AddComment = ({ blog, hideCommentForm }) => {
         content: content.input.value,
       })
     );
-    dispatch(setNotification(`Comment was added: ${content.input.value}`, 5));
+    dispatch(showNotification(`Comment was added: ${content.input.value}`, 5));
     hideCommentForm();
   };
 

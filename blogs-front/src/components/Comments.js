@@ -6,8 +6,8 @@ export const Comments = ({ blog }) => {
       <>
         <h3>Comments</h3>
         <ul>
-          {blog.comments.map((comment) => (
-            <li key={comment.id}>{comment}</li>
+          {blog.comments.map((comment, i) => (
+            <li key={i}>{comment}</li>
           ))}
         </ul>
       </>

@@ -18,9 +18,9 @@ export const User = () => {
       <p>
         <Link to="/users">All users</Link>
       </p>
-      <h2>
+      <h1>
         {userToDisplay.name} ({userToDisplay.username})
-      </h2>
+      </h1>
       <h3>Added blogs</h3>
       <div>
         <ul>

@@ -90,7 +90,7 @@ export const createBlog = ({ newTitle, newAuthor, newUrl }) => {
       if (error.response.data.error.includes("validation failed")) {
         return error.response.data.error;
       }
-      return false;
+      return error.response.data.error;
     }
   };
 };

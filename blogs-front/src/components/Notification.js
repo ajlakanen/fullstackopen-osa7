@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useSelector } from "react-redux";
+import { Alert } from "@mui/material";
 
 const Notification = () => {
   const notification = useSelector((state) => state.notification);
@@ -10,8 +11,8 @@ const Notification = () => {
     borderWidth: 1,
   };
 
-  if (notification !== "") {
-    return <div style={style}> {notification}</div>;
+  if (notification.text !== "") {
+    return <Alert severity={notification.severity}> {notification.text}</Alert>;
   } else {
     return <></>;
   }

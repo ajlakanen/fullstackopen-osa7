@@ -3,12 +3,13 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { Button } from "@mui/material";
 
 import { AddComment } from "../components/AddComment";
 import { Comments } from "./Comments";
 
 import { deleteBlog, like, selectBlog } from "../reducers/blogReducer";
-import { setNotification } from "../reducers/notificationReducer";
+import { showNotification } from "../reducers/notificationReducer";
 
 export const Blog = () => {
   const [commentVisible, setCommentVisible] = useState(false);
@@ -31,7 +32,7 @@ export const Blog = () => {
   const handleDelete = (blog) => {
     const result = dispatch(deleteBlog(blog));
     if (result) {
-      dispatch(setNotification("Blog deleted", 5));
+      dispatch(showNotification("Blog deleted", "info", 5));
       navigate("/");
     } else if (typeof result === "string") {
       if (result.response.data.error.includes("token expired")) {
@@ -44,10 +45,21 @@ export const Blog = () => {
 
   return (
     <>
-      CurrentUser : {currentUser.username}{" "}
-      {currentUser.username === blogToDisplay.user.username ? "true" : "false"}
       <h2>
-        {blogToDisplay.title} by {blogToDisplay.author}
+        {blogToDisplay.title} by {blogToDisplay.author}{" "}
+        {currentUser.username === blogToDisplay.user.username && (
+          <Button
+            variant="contained"
+            onClick={() => {
+              handleDelete(blogToDisplay);
+            }}
+            name="delete"
+            aria-labelledby="delete"
+          >
+            {" "}
+            delete
+          </Button>
+        )}
       </h2>
       <p>
         <a href={blogToDisplay.url} target="_blank" rel="noreferrer">
@@ -59,7 +71,7 @@ export const Blog = () => {
         <button
           onClick={() => {
             dispatch(like(blogToDisplay));
-            dispatch(setNotification("liked", 5));
+            dispatch(showNotification("liked", 5));
           }}
           name="like"
           aria-labelledby="like"
@@ -67,19 +79,7 @@ export const Blog = () => {
           like
         </button>
       </p>
-      {currentUser.username === blogToDisplay.user.username && (
-        <button
-          onClick={() => {
-            // dispatch(like(blogToDisplay));
-            // dispatch(setNotification("liked", 5));
-            handleDelete(blogToDisplay);
-          }}
-          name="delete"
-          aria-labelledby="delete"
-        >
-          delete
-        </button>
-      )}
+
       <Comments blog={blogToDisplay} />
       <button
         onClick={() => {

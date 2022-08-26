@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = "";
+const initialState = { text: "", severity: "success" };
+// const initialState = "";
 
 const notificationSlice = createSlice({
   name: "notification",
   initialState,
   reducers: {
     setNotification(state, action) {
-      return action.payload.text;
+      return { text: action.payload.text, severity: action.payload.severity };
+      // console.log(action);
     },
     hideNotification(state, action) {
       if (nextNotificationId - action.payload.id > 1) return state;
@@ -18,10 +20,10 @@ const notificationSlice = createSlice({
 
 let nextNotificationId = 0;
 
-export const showNotification = (text, duration = 2) => {
+export const showNotification = (text, severity, duration = 2) => {
   return async (dispatch) => {
     const id = nextNotificationId++;
-    dispatch(setNotification({ id, text }));
+    dispatch(setNotification({ id, text, severity }));
     setTimeout(() => {
       dispatch(hideNotification({ id }));
     }, duration * 1000);
