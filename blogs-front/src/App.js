@@ -23,6 +23,7 @@ import { Box, Button } from "@mui/material";
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
   const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
 
   // TODO: Logout when token expired
@@ -101,6 +102,7 @@ const App = () => {
     }
   };
 
+  // TODO: Could this be in userReducer?
   const handleCancel = (event) => {
     event.preventDefault();
     setLoginVisible(false);
@@ -124,7 +126,7 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogAppUser");
     blogService.setToken(null);
     dispatch(setUser(null));
-    navigate("/");
+    // navigate("/");
     dispatch(showNotification("Logging out...", "info", 5));
   };
 
@@ -135,7 +137,6 @@ const App = () => {
       <>
         <h1>Blogs</h1>
         <Notification />
-
         {loginForm()}
       </>
     );
