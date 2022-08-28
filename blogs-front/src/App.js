@@ -141,8 +141,6 @@ const App = () => {
     dispatch(showNotification("Logging out...", "info", 5));
   };
 
-  console.log("currentUser", currentUser);
-
   if (currentUser === null || currentUser.length === 0)
     return (
       <>
