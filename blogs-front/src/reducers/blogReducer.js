@@ -68,12 +68,6 @@ export const deleteBlog = (blog) => {
   };
 };
 
-// const handleDeleteClick = async (blog) => {
-//   if (window.confirm(`Delete ${blog.title}`)) {
-//
-//   }
-// };
-
 export const createBlog = ({ newTitle, newAuthor, newUrl }) => {
   return async (dispatch) => {
     const blogObject = {

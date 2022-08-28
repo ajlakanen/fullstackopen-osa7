@@ -17,18 +17,12 @@ export const Blog = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const navigate = useNavigate();
-
-  // const blogToDisplay = useSelector(
-  //   (state) => state.blogs.filter((b) => b.id === params.id)[0]
-  // );
-
   const currentUser = useSelector((state) => state.user);
   const blogToDisplay = useSelector(selectBlog(params.id));
 
   if (!blogToDisplay) {
     return null;
   }
-  // TODO: Delete
   const handleDelete = (blog) => {
     const result = dispatch(deleteBlog(blog));
     if (result) {
@@ -71,7 +65,7 @@ export const Blog = () => {
         <button
           onClick={() => {
             dispatch(like(blogToDisplay));
-            dispatch(showNotification("liked", 5));
+            dispatch(showNotification("liked", "success", 5));
           }}
           name="like"
           aria-labelledby="like"
