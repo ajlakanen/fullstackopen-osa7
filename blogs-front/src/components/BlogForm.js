@@ -29,18 +29,21 @@ export const BlogForm = () => {
     const response = await dispatch(
       createBlog({ newTitle, newAuthor, newUrl })
     );
-    if (response) {
+
+    if (response === true) {
       setNewTitle("");
       setNewAuthor("");
       setNewUrl("");
       setFormVisible(false);
       dispatch(showNotification("New blog added", "success"), 5);
     }
+    if (response.status === 401) {
+      navigate("/logout");
+    }
+
     if (typeof response === "string" && response.includes("token expired")) {
       // tokenExpiredLogout();
       // TODO
-      console.log("token expired");
-      navigate("/logout");
     } else {
       console.log(response);
     }

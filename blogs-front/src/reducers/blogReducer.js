@@ -83,14 +83,12 @@ export const createBlog = ({ newTitle, newAuthor, newUrl }) => {
     };
 
     try {
+      console.log("1");
       const returnedBlog = await blogService.create(blogObject);
       dispatch(appendBlog(returnedBlog));
       return true;
     } catch (error) {
-      if (error.response.data.error.includes("validation failed")) {
-        return error.response.data.error;
-      }
-      return error.response.data.error;
+      return error.response;
     }
   };
 };
