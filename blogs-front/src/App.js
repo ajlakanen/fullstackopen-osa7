@@ -18,7 +18,7 @@ import { setUser } from "./reducers/userReducer";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { AllUsers } from "./components/AllUsers";
 import { initializeUsers } from "./reducers/usersReducer";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
@@ -180,7 +180,9 @@ const App = () => {
           </Routes>
         </div>
         <footer>
-          <p>Bloglist app, Antti-Jussi Lakanen</p>
+          <Box>
+            <p>Bloglist app, Antti-Jussi Lakanen</p>
+          </Box>
         </footer>
       </div>
     );

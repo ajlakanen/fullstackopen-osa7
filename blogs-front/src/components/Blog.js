@@ -62,7 +62,8 @@ export const Blog = () => {
       </p>
       <p>
         {blogToDisplay.likes} likes{" "}
-        <button
+        <Button
+          variant="outlined"
           onClick={() => {
             dispatch(like(blogToDisplay));
             dispatch(showNotification("liked", "success", 5));
@@ -71,17 +72,21 @@ export const Blog = () => {
           aria-labelledby="like"
         >
           like
-        </button>
+        </Button>
       </p>
 
-      <Comments blog={blogToDisplay} />
-      <button
-        onClick={() => {
-          setCommentVisible(!commentVisible);
-        }}
-      >
-        Add a comment
-      </button>
+      {!commentVisible && (
+        <>
+          <Comments blog={blogToDisplay} />
+          <Button
+            onClick={() => {
+              setCommentVisible(!commentVisible);
+            }}
+          >
+            Add a comment
+          </Button>
+        </>
+      )}
       {commentVisible && (
         <AddComment
           blog={blogToDisplay}

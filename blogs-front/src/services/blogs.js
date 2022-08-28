@@ -1,8 +1,6 @@
 import axios from "axios";
 const config = require("../utils/config").default;
 const baseUrl = `${config.API_URL}/api/blogs`;
-// require("dotenv");
-// const baseUrl = "http://localhost:3001/api/persons";
 
 let token = null;
 
@@ -29,9 +27,7 @@ const like = async (id) => {
 };
 
 const comment = async (id, content) => {
-  console.log("blogService->content: ", content);
   const response = await axios.post(`${baseUrl}/${id}/comment`, { content });
-  console.log("response", response);
   return response.data;
 };
 

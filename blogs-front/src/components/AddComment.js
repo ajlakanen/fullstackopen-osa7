@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { useField } from "../hooks";
 import { useDispatch } from "react-redux";
 import { showNotification } from "../reducers/notificationReducer";
 import { addComment } from "../reducers/blogReducer";
+import { TextField, Button } from "@mui/material";
 
 export const AddComment = ({ blog, hideCommentForm }) => {
   const content = useField("text");
@@ -15,7 +17,13 @@ export const AddComment = ({ blog, hideCommentForm }) => {
         content: content.input.value,
       })
     );
-    dispatch(showNotification(`Comment was added: ${content.input.value}`, 5));
+    dispatch(
+      showNotification(
+        `Comment was added: ${content.input.value}`,
+        "success",
+        5
+      )
+    );
     hideCommentForm();
   };
 
@@ -27,14 +35,11 @@ export const AddComment = ({ blog, hideCommentForm }) => {
 
   return (
     <div>
-      <h2>Comment</h2>
+      <p>Add a comment</p>
       <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input {...content.input} />
-        </div>
-        <button>Save</button>
-        <button onClick={handleCancelClick}>cancel</button>
+        <TextField {...content.input} />
+        <Button type="submit">Save</Button>
+        <Button onClick={handleCancelClick}>cancel</Button>
       </form>
     </div>
   );

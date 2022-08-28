@@ -40,9 +40,7 @@ export const like = (blog) => {
 export const addComment = ({ blog, content }) => {
   return async (dispatch) => {
     try {
-      console.log("content", content);
       const returnedBlog = await blogService.comment(blog.id, content);
-      console.log("returnedBlog", returnedBlog);
       const blogs = await blogService.getAll();
 
       dispatch(

@@ -4,7 +4,7 @@ export const Comments = ({ blog }) => {
   } else {
     return (
       <>
-        <h3>Comments</h3>
+        <p>Comments</p>
         <ul>
           {blog.comments.map((comment, i) => (
             <li key={i}>{comment}</li>
