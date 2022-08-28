@@ -19,6 +19,8 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { AllUsers } from "./components/AllUsers";
 import { initializeUsers } from "./reducers/usersReducer";
 import { Box, Button } from "@mui/material";
+import { getAuthStatus, loggedIn, setAuthState } from "./reducers/authReducer";
+import { AuthStatuses } from "./utils/authStatus";
 
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
@@ -44,11 +46,19 @@ const App = () => {
     if (loggedUserJSON) {
       const currentUser = JSON.parse(loggedUserJSON);
       dispatch(setUser(currentUser));
+      dispatch(setAuthState(AuthStatuses.LOGGED_IN));
       blogService.setToken(currentUser.token);
     }
   }, []);
 
+  const authStatus = useSelector((state) => state.authStatus);
+
+  useEffect(() => {
+    dispatch(getAuthStatus());
+  }, [authStatus]);
+
   const currentUser = useSelector((state) => state.user);
+  console.log("authStatus", authStatus);
 
   // TODO: MOdify existing blog
   // eslint-disable-next-line no-unused-vars
@@ -95,8 +105,9 @@ const App = () => {
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
       blogService.setToken(user.token);
       dispatch(setUser(user));
-      setLoginVisible(false);
+      dispatch(loggedIn());
       dispatch(showNotification(`${user.username} logged in`, "success", 5));
+      setLoginVisible(false);
     } catch (exception) {
       dispatch(showNotification("wrong username or password", "error", 5));
     }
@@ -137,7 +148,7 @@ const App = () => {
       <>
         <h1>Blogs</h1>
         <Notification />
-        {loginForm()}
+        {authStatus === AuthStatuses.NOT_LOGGED_IN && loginForm()}
       </>
     );
   else
