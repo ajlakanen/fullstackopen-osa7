@@ -1,7 +1,7 @@
-Full Stack Open 2022, osa 4 & 5, bloglist backend
+# Full Stack Open 2022, part 7
 
-Front end (part 4): <https://github.com/ajlakanen/fullstackopen-osa4-blogs-front>
+A bloglist application.
 
-Front end (part 5): <https://github.com/ajlakanen/fullstackopen-osa5-blogs-front>
+This is the back end.
 
-Working app: (TBA)
+Back end is [here](https://github.com/ajlakanen/fullstackopen-osa7/tree/main/blogs-front).
