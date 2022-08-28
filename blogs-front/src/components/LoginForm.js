@@ -11,22 +11,24 @@ export const LoginForm = ({ handleSubmit, handleCancel }) => {
           handleSubmit(event, username, password);
         }}
       >
-        <p>
+        <div>
           <TextField
             label="username:"
             value={username}
+            margin="normal"
             onChange={(event) => setUsername(event.target.value)}
           />
-        </p>
-        <p>
+        </div>
+        <div>
           <TextField
             label="password"
             type="password"
             autoComplete="on"
+            margin="normal"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
-        </p>
+        </div>
         <Button variant="contained" id="login-button" type="submit">
           login
         </Button>{" "}
