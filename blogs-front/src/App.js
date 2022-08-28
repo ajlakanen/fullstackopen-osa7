@@ -128,21 +128,6 @@ const App = () => {
     dispatch(showNotification("Logging out...", "info", 5));
   };
 
-  // TODO: filter
-  // newFilter === ""
-  //   ? blogs
-  //   : blogs.filter((blog) =>
-  //       blog.title.toLowerCase().includes(newFilter.toLowerCase())
-  //     );
-
-  // const match = useMatch("/users/:id");
-  // const allUsers = getAllUsers();
-  // console.log("all users: ", allUsers);
-  //
-  // const userToBrowse = match
-  //   ? allUsers.find((a) => a.id === Number(match.params.id))
-  //   : null;
-
   if (!currentUser)
     return (
       <>
